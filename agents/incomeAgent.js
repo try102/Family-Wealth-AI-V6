@@ -2,11 +2,11 @@
 
 Family Wealth AI OS
 
-V6.0 Development Build001
+V6.1 Stable Compatible Build
 
 Income Agent
 
-家庭收入管理核心模块
+收入管理兼容版
 
 */
 
@@ -14,7 +14,7 @@ const incomeAgent = {
 
     name:
 
-    "Income Agent V6.0",
+    "Income Agent V6.1 Stable",
 
     // ======================
 
@@ -24,19 +24,53 @@ const incomeAgent = {
 
     init(){
 
-        if(
+        let oldData =
 
-            !localStorage.getItem(
+        localStorage.getItem(
 
-                "wealth_income"
+            "wealth_incomes"
 
-            )
+        );
 
-        ){
+        let newData =
+
+        localStorage.getItem(
+
+            "wealth_income"
+
+        );
+
+        // 优先恢复 V5.4 数据
+
+        if(oldData){
 
             localStorage.setItem(
 
                 "wealth_income",
+
+                oldData
+
+            );
+
+        }
+
+        else if(newData){
+
+            localStorage.setItem(
+
+                "wealth_incomes",
+
+                newData
+
+            );
+
+        }
+
+        else{
+
+            localStorage.setItem(
+
+                "wealth_incomes",
 
                 JSON.stringify([])
 
@@ -56,17 +90,29 @@ const incomeAgent = {
 
     getData(){
 
-        return JSON.parse(
+        let data =
+
+        localStorage.getItem(
+
+            "wealth_incomes"
+
+        );
+
+        if(!data){
+
+            data =
 
             localStorage.getItem(
 
                 "wealth_income"
 
-            )
+            );
 
-            ||
+        }
 
-            "[]"
+        return JSON.parse(
+
+            data || "[]"
 
         );
 
@@ -79,6 +125,16 @@ const incomeAgent = {
     // ======================
 
     save(data){
+
+        localStorage.setItem(
+
+            "wealth_incomes",
+
+            JSON.stringify(data)
+
+        );
+
+        // 兼容 V6.0
 
         localStorage.setItem(
 
@@ -174,13 +230,13 @@ const incomeAgent = {
 
         list.findIndex(
 
-            item=>
+            item =>
 
-            item.id===id
+            item.id === id
 
         );
 
-        if(index!==-1){
+        if(index !== -1){
 
             list[index]={
 
@@ -214,9 +270,9 @@ const incomeAgent = {
 
         list.filter(
 
-            item=>
+            item =>
 
-            item.id!==id
+            item.id !== id
 
         );
 
