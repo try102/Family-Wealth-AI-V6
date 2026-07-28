@@ -2,7 +2,7 @@
 
 Family Wealth AI OS
 
-V6.0 Development Build001
+V6.1 Stable
 
 Liability Agent
 
@@ -14,7 +14,7 @@ const liabilityAgent = {
 
     name:
 
-    "Liability Agent V6.0",
+    "Liability Agent V6.1 Stable",
 
     // ======================
 
@@ -74,7 +74,7 @@ const liabilityAgent = {
 
     // ======================
 
-    // 保存数据
+    // 保存
 
     // ======================
 
@@ -96,7 +96,7 @@ const liabilityAgent = {
 
     // ======================
 
-    add(liability){
+    add(data){
 
         let list =
 
@@ -110,17 +110,17 @@ const liabilityAgent = {
 
             name:
 
-            liability.name || "",
+            data.name || "",
 
             category:
 
-            liability.category || "其他",
+            data.category || "其他",
 
             principal:
 
             Number(
 
-                liability.principal || 0
+                data.principal || 0
 
             ),
 
@@ -128,29 +128,17 @@ const liabilityAgent = {
 
             Number(
 
-                liability.interest || 0
+                data.interest || 0
 
             ),
 
-            monthlyPayment:
+            period:
 
-            Number(
-
-                liability.monthlyPayment || 0
-
-            ),
-
-            startDate:
-
-            liability.startDate || "",
-
-            endDate:
-
-            liability.endDate || "",
+            data.period || "",
 
             note:
 
-            liability.note || ""
+            data.note || ""
 
         };
 
