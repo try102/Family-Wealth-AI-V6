@@ -2,9 +2,11 @@
 
 Family Wealth AI OS
 
-V6.0.3 CRUD Restore Build
+V6.0.4 Stable Restore Build
 
 Main Application
+
+恢复 V5.4 稳定运行链路
 
 */
 
@@ -46,7 +48,11 @@ from "./agents/retirementAgent.js";
 
 // ======================
 
-window.onload=function(){
+document.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
 
     assetsAgent.init();
 
@@ -54,7 +60,11 @@ window.onload=function(){
 
     investmentAgent.init();
 
-    liabilityAgent.init();
+    if(liabilityAgent.init){
+
+        liabilityAgent.init();
+
+    }
 
     if(taxAgent.init){
 
@@ -68,11 +78,15 @@ window.onload=function(){
 
     }
 
-    cfoAgent.init();
+    if(cfoAgent.init){
+
+        cfoAgent.init();
+
+    }
 
     refreshAll();
 
-};
+});
 
 // ======================
 
@@ -90,7 +104,7 @@ function getValue(id){
 
     ?
 
-    el.value
+    el.value.trim()
 
     :
 
@@ -156,11 +170,11 @@ function updateDashboard(){
 
         totalAssets:
 
-        wealth.totalAssets,
+        wealth.totalAssets || 0,
 
         netWorth:
 
-        wealth.netWorth,
+        wealth.netWorth || 0,
 
         totalLiability:
 
@@ -168,11 +182,11 @@ function updateDashboard(){
 
         totalIncome:
 
-        wealth.totalIncome,
+        wealth.totalIncome || 0,
 
         investmentReturn:
 
-        wealth.investmentProfit,
+        wealth.investmentProfit || 0,
 
         wealthScore:
 
@@ -204,11 +218,7 @@ function updateDashboard(){
 
                 "¥"+
 
-                Number(
-
-                    data[id] || 0
-
-                )
+                Number(data[id])
 
                 .toLocaleString();
 
@@ -238,18 +248,6 @@ function addNewAsset(){
 
         getValue("assetCategory"),
 
-        type:
-
-        getValue("assetType"),
-
-        owner:
-
-        getValue("assetOwner"),
-
-        country:
-
-        getValue("assetCountry"),
-
         value:
 
         Number(
@@ -262,25 +260,15 @@ function addNewAsset(){
 
     if(!asset.name){
 
-        alert(
-
-            "请输入资产名称"
-
-        );
+        alert("请输入资产名称");
 
         return;
 
     }
 
-   let result = assetsAgent.add(asset);
+    assetsAgent.add(asset);
 
-alert(
-
-    "添加成功：" + JSON.stringify(result)
-
-);
-
-refreshAll();
+    refreshAll();
 
 }
 
@@ -451,21 +439,13 @@ function addIncome(){
 
             getValue("incomeAmount")
 
-        ),
-
-        period:
-
-        getValue("incomePeriod")
+        )
 
     };
 
     if(!income.name){
 
-        alert(
-
-            "请输入收入名称"
-
-        );
+        alert("请输入收入名称");
 
         return;
 
@@ -641,22 +621,6 @@ function addInvestment(){
 
         getValue("investmentTicker"),
 
-        type:
-
-        getValue("investmentType"),
-
-        market:
-
-        getValue("investmentMarket"),
-
-        currency:
-
-        getValue("investmentCurrency"),
-
-        buyDate:
-
-        getValue("investmentBuyDate"),
-
         buyPrice:
 
         Number(
@@ -679,27 +643,23 @@ function addInvestment(){
 
             getValue("investmentCurrentPrice")
 
-        ),
-
-        note:
-
-        getValue("investmentNote")
+        )
 
     };
 
     if(!investment.name){
 
-        alert(
-
-            "请输入投资名称"
-
-        );
+        alert("请输入投资名称");
 
         return;
 
     }
 
-    investmentAgent.add(investment);
+    investmentAgent.add(
+
+        investment
+
+    );
 
     refreshAll();
 
@@ -886,7 +846,11 @@ function updateLiabilityDisplay(){
 
     box.innerHTML="";
 
-    if(!liabilityAgent.view){
+    if(
+
+        !liabilityAgent.view
+
+    ){
 
         return;
 
@@ -896,7 +860,15 @@ function updateLiabilityDisplay(){
 
     .forEach(item=>{
 
-        box.innerHTML +=`
+        let div =
+
+        document.createElement(
+
+            "div"
+
+        );
+
+        div.innerHTML=`
 
         <hr>
 
@@ -908,7 +880,7 @@ function updateLiabilityDisplay(){
 
         类别：
 
-        ${item.category || ""}
+        ${item.category || "其他"}
 
         <br>
 
@@ -916,7 +888,7 @@ function updateLiabilityDisplay(){
 
         ¥${Number(
 
-            item.principal || 0
+            item.principal || item.amount || 0
 
         )
 
@@ -931,6 +903,8 @@ function updateLiabilityDisplay(){
         </button>
 
         `;
+
+        box.appendChild(div);
 
     });
 
@@ -964,7 +938,9 @@ function generateCFOReport(){
 
         incomeAgent,
 
-        investmentAgent
+        investmentAgent,
+
+        liabilityAgent
 
     );
 
@@ -988,7 +964,7 @@ function generateCFOReport(){
 
     <h3>
 
-    ${report.title}
+    AI CFO 财富分析报告
 
     </h3>
 
@@ -1084,7 +1060,7 @@ function generateCFOReport(){
 
         :
 
-        ""
+        "<li>建议持续提高储蓄率和长期投资比例</li>"
 
     }
 
@@ -1106,7 +1082,7 @@ function generateTaxReport(){
 
     document.getElementById(
 
-        "taxReport"
+        "taxCenter"
 
     );
 
@@ -1132,7 +1108,7 @@ function generateRetirementReport(){
 
     document.getElementById(
 
-        "retirementReport"
+        "retirementCenter"
 
     );
 
@@ -1148,7 +1124,7 @@ function generateRetirementReport(){
 
 // ======================
 
-// 暴露函数
+// 暴露给HTML
 
 // ======================
 
