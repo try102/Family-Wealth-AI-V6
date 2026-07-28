@@ -2,11 +2,11 @@
 
 Family Wealth AI OS
 
-V6.0 Development Build001
+V6.0.1 Stability Patch
 
 Main Application
 
-系统统一控制层
+财富系统统一控制层
 
 */
 
@@ -78,13 +78,13 @@ window.onload=function(){
 
 // ======================
 
-// 通用读取
+// 工具
 
 // ======================
 
 function getValue(id){
 
-    const el =
+    let el =
 
     document.getElementById(id);
 
@@ -128,7 +128,7 @@ function refreshAll(){
 
 function updateDashboard(){
 
-    const data =
+    let wealth =
 
     wealthEngine.summary(
 
@@ -142,51 +142,81 @@ function updateDashboard(){
 
     );
 
-    const values={
+    let cfo =
+
+    cfoAgent.report(
+
+        assetsAgent,
+
+        investmentAgent,
+
+        incomeAgent,
+
+        liabilityAgent
+
+    );
+
+    let data={
 
         totalAssets:
 
-        data.totalAssets,
+        wealth.totalAssets,
 
         netWorth:
 
-        data.netWorth,
+        wealth.netWorth,
 
         totalLiability:
 
-        data.totalLiability,
+        wealth.totalLiability,
 
         totalIncome:
 
-        data.totalIncome,
+        wealth.totalIncome,
 
         investmentReturn:
 
-        data.investmentProfit
+        wealth.investmentProfit,
+
+        wealthScore:
+
+        cfo.wealthScore
 
     };
 
-    Object.keys(values)
+    Object.keys(data)
 
     .forEach(id=>{
 
-        const el =
+        let el =
 
         document.getElementById(id);
 
         if(el){
 
-            el.innerHTML =
+            if(id==="wealthScore"){
 
-            "¥" +
+                el.innerHTML =
 
-            Number(
+                data[id];
 
-                values[id] || 0
+            }
 
-            )
+            else{
 
-            .toLocaleString();
+                el.innerHTML =
+
+                "¥"+
+
+                Number(
+
+                    data[id] || 0
+
+                )
+
+                .toLocaleString();
+
+            }
 
         }
 
@@ -202,7 +232,7 @@ function updateDashboard(){
 
 function addNewAsset(){
 
-    const asset={
+    let asset={
 
         name:
 
@@ -224,7 +254,11 @@ function addNewAsset(){
 
     if(!asset.name){
 
-        alert("请输入资产名称");
+        alert(
+
+            "请输入资产名称"
+
+        );
 
         return;
 
@@ -238,7 +272,7 @@ function addNewAsset(){
 
 function updateAssetDisplay(){
 
-    const box =
+    let box=
 
     document.getElementById(
 
@@ -254,7 +288,7 @@ function updateAssetDisplay(){
 
     .forEach(item=>{
 
-        box.innerHTML += `
+        box.innerHTML +=`
 
         <div class="item">
 
@@ -301,7 +335,6 @@ function deleteAsset(id){
     refreshAll();
 
 }
-
 // ======================
 
 // 负债中心
@@ -310,7 +343,7 @@ function deleteAsset(id){
 
 function addNewLiability(){
 
-    const liability={
+    let liability={
 
         name:
 
@@ -340,7 +373,11 @@ function addNewLiability(){
 
     if(!liability.name){
 
-        alert("请输入负债名称");
+        alert(
+
+            "请输入负债名称"
+
+        );
 
         return;
 
@@ -354,7 +391,7 @@ function addNewLiability(){
 
 function updateLiabilityDisplay(){
 
-    const box =
+    let box=
 
     document.getElementById(
 
@@ -370,11 +407,15 @@ function updateLiabilityDisplay(){
 
     .forEach(item=>{
 
-        box.innerHTML += `
+        box.innerHTML +=`
 
         <div class="item">
 
-        <h3>${item.name}</h3>
+        <h3>
+
+        ${item.name}
+
+        </h3>
 
         类别：
 
@@ -422,7 +463,7 @@ function deleteLiability(id){
 
 function addIncome(){
 
-    const income={
+    let income={
 
         name:
 
@@ -440,7 +481,11 @@ function addIncome(){
 
     if(!income.name){
 
-        alert("请输入收入名称");
+        alert(
+
+            "请输入收入名称"
+
+        );
 
         return;
 
@@ -454,7 +499,7 @@ function addIncome(){
 
 function updateIncomeDisplay(){
 
-    const box =
+    let box=
 
     document.getElementById(
 
@@ -470,11 +515,15 @@ function updateIncomeDisplay(){
 
     .forEach(item=>{
 
-        box.innerHTML += `
+        box.innerHTML +=`
 
         <div class="item">
 
-        <h3>${item.name}</h3>
+        <h3>
+
+        ${item.name}
+
+        </h3>
 
         金额：
 
@@ -500,7 +549,7 @@ function updateIncomeDisplay(){
 
 function addInvestment(){
 
-    const investment={
+    let investment={
 
         name:
 
@@ -538,7 +587,11 @@ function addInvestment(){
 
     if(!investment.name){
 
-        alert("请输入投资名称");
+        alert(
+
+            "请输入投资名称"
+
+        );
 
         return;
 
@@ -552,7 +605,7 @@ function addInvestment(){
 
 function updateInvestmentDisplay(){
 
-    const box =
+    let box=
 
     document.getElementById(
 
@@ -564,15 +617,19 @@ function updateInvestmentDisplay(){
 
     box.innerHTML="";
 
-    investmentAgent.view()
+    investmentAgent.inventory()
 
     .forEach(item=>{
 
-        box.innerHTML += `
+        box.innerHTML +=`
 
         <div class="item">
 
-        <h3>${item.name}</h3>
+        <h3>
+
+        ${item.name}
+
+        </h3>
 
         ${item.ticker || ""}
 
@@ -581,6 +638,26 @@ function updateInvestmentDisplay(){
         数量：
 
         ${item.buyQuantity || 0}
+
+        <br>
+
+        市值：
+
+        ¥${Number(
+
+            item.marketValue || 0
+
+        ).toLocaleString()}
+
+        <br>
+
+        收益：
+
+        ¥${Number(
+
+            item.totalProfit || 0
+
+        ).toLocaleString()}
 
         </div>
 
@@ -598,21 +675,21 @@ function updateInvestmentDisplay(){
 
 function generateCFOReport(){
 
-    const report =
+    let report =
 
     cfoAgent.report(
 
         assetsAgent,
 
-        incomeAgent,
-
         investmentAgent,
+
+        incomeAgent,
 
         liabilityAgent
 
     );
 
-    const box =
+    let box=
 
     document.getElementById(
 
@@ -622,7 +699,9 @@ function generateCFOReport(){
 
     if(!box)return;
 
-    box.innerHTML = `
+    box.innerHTML=`
+
+    <div class="item">
 
     <h3>
 
@@ -630,17 +709,19 @@ function generateCFOReport(){
 
     </h3>
 
-    <p>
-
     净资产：
 
     ¥${Number(
 
-        report.netWorth
+        report.netWorth || 0
 
     ).toLocaleString()}
 
-    </p>
+    <br>
+
+    财富评分：
+
+    ${report.wealthScore}
 
     <h4>
 
@@ -652,7 +733,9 @@ function generateCFOReport(){
 
     ${report.advice
 
-    .map(x=>
+    .map(
+
+        x=>
 
         `<li>${x}</li>`
 
@@ -662,13 +745,15 @@ function generateCFOReport(){
 
     </ul>
 
+    </div>
+
     `;
 
 }
 
 // ======================
 
-// 暴露接口
+// 暴露给 HTML
 
 // ======================
 
