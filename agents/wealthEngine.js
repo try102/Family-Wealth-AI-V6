@@ -2,19 +2,45 @@
 
 Family Wealth AI OS
 
-V6.0 Development Build001
+V6.1 Stable
 
 Wealth Engine
 
-家庭财富统一计算核心
+家庭财富统一总账引擎
+
+兼容 V5.4 / V6.0
 
 */
 
-const wealthEngine = {
+const wealthEngine={
 
     name:
 
-    "Wealth Engine V6.0",
+    "Wealth Engine V6.1 Stable",
+
+    // ======================
+
+    // 安全读取
+
+    // ======================
+
+    getSummary(agent){
+
+        if(!agent){
+
+            return {};
+
+        }
+
+        if(agent.summary){
+
+            return agent.summary();
+
+        }
+
+        return {};
+
+    },
 
     // ======================
 
@@ -34,21 +60,37 @@ const wealthEngine = {
 
     ){
 
-        const assets =
+        let assets =
 
-        assetsAgent.summary();
+        this.getSummary(
 
-        const investment =
+            assetsAgent
 
-        investmentAgent.summary();
+        );
 
-        const income =
+        let investment =
 
-        incomeAgent.summary();
+        this.getSummary(
 
-        const liability =
+            investmentAgent
+
+        );
+
+        let income =
+
+        this.getSummary(
+
+            incomeAgent
+
+        );
+
+        let liability =
 
         liabilityAgent
+
+        &&
+
+        liabilityAgent.summary
 
         ?
 
@@ -56,15 +98,9 @@ const wealthEngine = {
 
         :
 
-        {
+        {};
 
-            totalLiability:0,
-
-            count:0
-
-        };
-
-        const normalAssets =
+        let normalAssets =
 
         Number(
 
@@ -72,7 +108,7 @@ const wealthEngine = {
 
         );
 
-        const investmentAssets =
+        let investmentAssets =
 
         Number(
 
@@ -80,7 +116,7 @@ const wealthEngine = {
 
         );
 
-        const totalAssets =
+        let totalAssets =
 
         normalAssets
 
@@ -88,59 +124,35 @@ const wealthEngine = {
 
         investmentAssets;
 
-        const totalLiability =
+        let totalLiability =
 
         Number(
 
-            liability.totalLiability || 0
+            liability.totalLiability
+
+            ||
+
+            liability.totalValue
+
+            ||
+
+            0
 
         );
 
-        const netWorth =
-
-        totalAssets
-
-        -
-
-        totalLiability;
-
-        const debtRatio =
-
-        totalAssets > 0
-
-        ?
-
-        Number(
-
-            (
-
-                totalLiability
-
-                /
-
-                totalAssets
-
-                *
-
-                100
-
-            ).toFixed(2)
-
-        )
-
-        :
-
-        0;
-
-        return {
+        return{
 
             totalAssets,
 
             totalLiability,
 
-            netWorth,
+            netWorth:
 
-            debtRatio,
+            totalAssets
+
+            -
+
+            totalLiability,
 
             normalAssets,
 
@@ -150,7 +162,15 @@ const wealthEngine = {
 
             Number(
 
-                income.totalIncome || 0
+                income.totalIncome
+
+                ||
+
+                income.total
+
+                ||
+
+                0
 
             ),
 
@@ -158,25 +178,37 @@ const wealthEngine = {
 
             Number(
 
-                investment.profit || 0
+                investment.profit
+
+                ||
+
+                0
 
             ),
 
             assetCount:
 
-            assets.count || 0,
+            assets.count
 
-            liabilityCount:
+            ||
 
-            liability.count || 0,
+            0,
 
             investmentCount:
 
-            investment.count || 0,
+            investment.count
+
+            ||
+
+            0,
 
             incomeCount:
 
-            income.count || 0
+            income.count
+
+            ||
+
+            0
 
         };
 
@@ -184,7 +216,7 @@ const wealthEngine = {
 
     // ======================
 
-    // 资产配置分析
+    // 资产配置
 
     // ======================
 
@@ -196,59 +228,95 @@ const wealthEngine = {
 
     ){
 
-        const result={};
+        let result={};
 
-        assetsAgent.view()
+        if(
 
-        .forEach(item=>{
+            assetsAgent
 
-            const key =
+            &&
 
-            item.category || "其他";
+            assetsAgent.view
 
-            if(!result[key]){
+        ){
 
-                result[key]=0;
+            assetsAgent.view()
 
-            }
+            .forEach(item=>{
 
-            result[key]+=
+                let category =
 
-            Number(
-
-                item.value || 0
-
-            );
-
-        });
-
-        investmentAgent.view()
-
-        .forEach(item=>{
-
-            const key =
-
-            item.type || "投资";
-
-            if(!result[key]){
-
-                result[key]=0;
-
-            }
-
-            result[key]+=
-
-            Number(
-
-                investmentAgent.marketValue(item)
+                item.category
 
                 ||
 
-                0
+                "其他";
 
-            );
+                if(!result[category]){
 
-        });
+                    result[category]=0;
+
+                }
+
+                result[category]+=
+
+                Number(
+
+                    item.value
+
+                    ||
+
+                    0
+
+                );
+
+            });
+
+        }
+
+        if(
+
+            investmentAgent
+
+            &&
+
+            investmentAgent.inventory
+
+        ){
+
+            investmentAgent.inventory()
+
+            .forEach(item=>{
+
+                let category =
+
+                item.type
+
+                ||
+
+                "投资";
+
+                if(!result[category]){
+
+                    result[category]=0;
+
+                }
+
+                result[category]+=
+
+                Number(
+
+                    item.marketValue
+
+                    ||
+
+                    0
+
+                );
+
+            });
+
+        }
 
         return result;
 
@@ -256,43 +324,129 @@ const wealthEngine = {
 
     // ======================
 
-    // 财富健康
+    // 所有人配置
 
     // ======================
 
-    healthSummary(summary){
+    ownerAllocation(
 
-        let level = "优秀";
+        assetsAgent,
 
-        if(summary.debtRatio>60){
+        investmentAgent
 
-            level="高风险";
+    ){
+
+        let result={};
+
+        if(
+
+            assetsAgent
+
+            &&
+
+            assetsAgent.view
+
+        ){
+
+            assetsAgent.view()
+
+            .forEach(item=>{
+
+                let owner =
+
+                item.owner
+
+                ||
+
+                "未分类";
+
+                if(!result[owner]){
+
+                    result[owner]=0;
+
+                }
+
+                result[owner]+=
+
+                Number(
+
+                    item.value
+
+                    ||
+
+                    0
+
+                );
+
+            });
 
         }
 
-        else if(summary.debtRatio>40){
+        return result;
 
-            level="偏高";
+    },
+
+    // ======================
+
+    // 国家配置
+
+    // ======================
+
+    countryAllocation(
+
+        assetsAgent,
+
+        investmentAgent
+
+    ){
+
+        let result={};
+
+        if(
+
+            assetsAgent
+
+            &&
+
+            assetsAgent.view
+
+        ){
+
+            assetsAgent.view()
+
+            .forEach(item=>{
+
+                let country =
+
+                item.country
+
+                ||
+
+                "其他";
+
+                if(!result[country]){
+
+                    result[country]=0;
+
+                }
+
+                result[country]+=
+
+                Number(
+
+                    item.value
+
+                    ||
+
+                    0
+
+                );
+
+            });
 
         }
 
-        else if(summary.debtRatio>20){
-
-            level="正常";
-
-        }
-
-        return {
-
-            debtRatio:
-
-            summary.debtRatio,
-
-            debtLevel:
-
-            level
-
-        };
+        return result;
 
     },
 
@@ -314,23 +468,21 @@ const wealthEngine = {
 
     ){
 
-        const summary =
+        return{
 
-        this.summary(
+            summary:
 
-            assetsAgent,
+            this.summary(
 
-            investmentAgent,
+                assetsAgent,
 
-            incomeAgent,
+                investmentAgent,
 
-            liabilityAgent
+                incomeAgent,
 
-        );
+                liabilityAgent
 
-        return {
-
-            summary,
+            ),
 
             allocation:
 
@@ -342,11 +494,23 @@ const wealthEngine = {
 
             ),
 
-            health:
+            ownerAllocation:
 
-            this.healthSummary(
+            this.ownerAllocation(
 
-                summary
+                assetsAgent,
+
+                investmentAgent
+
+            ),
+
+            countryAllocation:
+
+            this.countryAllocation(
+
+                assetsAgent,
+
+                investmentAgent
 
             )
 
