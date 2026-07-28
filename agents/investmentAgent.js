@@ -2,11 +2,11 @@
 
 Family Wealth AI OS
 
-V6.0 Development Build001
+V6.1 Ledger Stable
 
 Investment Agent
 
-家庭投资管理核心模块
+交易账本 + 库存管理 + 收益分析
 
 */
 
@@ -14,7 +14,9 @@ const investmentAgent = {
 
     name:
 
-    "Investment Agent V6.0",
+    "Investment Agent V6.1 Ledger Stable",
+
+    investments: [],
 
     // ======================
 
@@ -24,51 +26,97 @@ const investmentAgent = {
 
     init(){
 
-        if(
+        this.load();
 
-            !localStorage.getItem(
-
-                "wealth_investments"
-
-            )
-
-        ){
-
-            localStorage.setItem(
-
-                "wealth_investments",
-
-                JSON.stringify([])
-
-            );
-
-        }
-
-        return "Investment Ready";
+        return "Investment Agent Ready";
 
     },
 
     // ======================
 
-    // 获取数据
+    // 数据读取
 
     // ======================
 
-    getData(){
+    load(){
 
-        return JSON.parse(
+        let data =
 
-            localStorage.getItem(
+        localStorage.getItem(
 
-                "wealth_investments"
+            "wealth_investments"
+
+        );
+
+        if(data){
+
+            this.investments =
+
+            JSON.parse(data);
+
+        }
+
+        else{
+
+            this.investments=[];
+
+        }
+
+        // 数据兼容修复
+
+        this.investments =
+
+        this.investments.map(item=>({
+
+            ...item,
+
+            sellDate:
+
+            item.sellDate || "",
+
+            sellPrice:
+
+            Number(
+
+                item.sellPrice || 0
+
+            ),
+
+            sellQuantity:
+
+            Number(
+
+                item.sellQuantity || 0
+
+            ),
+
+            buyQuantity:
+
+            Number(
+
+                item.buyQuantity || 0
+
+            ),
+
+            buyPrice:
+
+            Number(
+
+                item.buyPrice || 0
+
+            ),
+
+            currentPrice:
+
+            Number(
+
+                item.currentPrice || 0
 
             )
 
-            ||
+        }));
 
-            "[]"
-
-        );
+        this.save();
 
     },
 
@@ -78,195 +126,31 @@ const investmentAgent = {
 
     // ======================
 
-    save(data){
+    save(){
 
         localStorage.setItem(
 
             "wealth_investments",
 
-            JSON.stringify(data)
+            JSON.stringify(
 
-        );
-
-    },
-
-    // ======================
-
-    // 添加投资
-
-    // ======================
-
-    add(investment){
-
-        let list =
-
-        this.getData();
-
-        let item={
-
-            id:
-
-            Date.now(),
-
-            name:
-
-            investment.name || "",
-
-            ticker:
-
-            investment.ticker || "",
-
-            type:
-
-            investment.type || "股票",
-
-            market:
-
-            investment.market || "",
-
-            currency:
-
-            investment.currency || "USD",
-
-            buyPrice:
-
-            Number(
-
-                investment.buyPrice || 0
-
-            ),
-
-            buyQuantity:
-
-            Number(
-
-                investment.buyQuantity || 0
-
-            ),
-
-            currentPrice:
-
-            Number(
-
-                investment.currentPrice || 0
-
-            ),
-
-            buyDate:
-
-            investment.buyDate || "",
-
-            note:
-
-            investment.note || ""
-
-        };
-
-        list.push(item);
-
-        this.save(list);
-
-        return item;
-
-    },
-
-    // ======================
-
-    // 查看
-
-    // ======================
-
-    view(){
-
-        return this.getData();
-
-    },
-
-    // ======================
-
-    // 编辑
-
-    // ======================
-
-    edit(id,newData){
-
-        let list =
-
-        this.getData();
-
-        let index =
-
-        list.findIndex(
-
-            item=>
-
-            item.id===id
-
-        );
-
-        if(index!==-1){
-
-            list[index]={
-
-                ...list[index],
-
-                ...newData
-
-            };
-
-        }
-
-        this.save(list);
-
-        return list;
-
-    },
-
-    // ======================
-
-    // 删除
-
-    // ======================
-
-    delete(id){
-
-        let list =
-
-        this.getData();
-
-        list =
-
-        list.filter(
-
-            item=>
-
-            item.id!==id
-
-        );
-
-        this.save(list);
-
-        return "deleted";
-
-    },
-
-    // ======================
-
-    // 单项市值
-
-    // ======================
-
-    marketValue(item){
-
-        return (
-
-            Number(
-
-                item.currentPrice || 0
+                this.investments
 
             )
 
-            *
+        );
+
+    },
+
+    // ======================
+
+    // 剩余数量
+
+    // ======================
+
+    remainingQuantity(item){
+
+        return (
 
             Number(
 
@@ -274,43 +158,11 @@ const investmentAgent = {
 
             )
 
-        );
-
-    },
-
-    // ======================
-
-    // 单项收益
-
-    // ======================
-
-    profit(item){
-
-        return (
-
-            (
-
-                Number(
-
-                    item.currentPrice || 0
-
-                )
-
-                -
-
-                Number(
-
-                    item.buyPrice || 0
-
-                )
-
-            )
-
-            *
+            -
 
             Number(
 
-                item.buyQuantity || 0
+                item.sellQuantity || 0
 
             )
 
@@ -320,29 +172,13 @@ const investmentAgent = {
 
     // ======================
 
-    // 投资汇总
+    // 买入成本
 
     // ======================
 
-    summary(){
+    buyAmount(item){
 
-        let list =
-
-        this.getData();
-
-        let totalValue=0;
-
-        let totalCost=0;
-
-        let profit=0;
-
-        list.forEach(item=>{
-
-            totalValue +=
-
-            this.marketValue(item);
-
-            totalCost +=
+        return (
 
             Number(
 
@@ -356,84 +192,36 @@ const investmentAgent = {
 
                 item.buyQuantity || 0
 
-            );
+            )
 
-            profit +=
-
-            this.profit(item);
-
-        });
-
-        return {
-
-            count:
-
-            list.length,
-
-            totalValue,
-
-            totalCost,
-
-            profit,
-
-            returnRate:
-
-            totalCost>0
-
-            ?
-
-            (
-
-                profit
-
-                /
-
-                totalCost
-
-                *
-
-                100
-
-            ).toFixed(2)
-
-            :
-
-            0
-
-        };
+        );
 
     },
 
     // ======================
 
-    // 持仓列表
+    // 卖出金额
 
     // ======================
 
-    inventory(){
+    sellAmount(item){
 
-        return this.getData()
+        return (
 
-        .map(item=>{
+            Number(
 
-            return {
+                item.sellPrice || 0
 
-                ...item,
+            )
 
-                marketValue:
+            *
 
-                this.marketValue(item),
+            Number(
 
-                totalProfit:
+                item.sellQuantity || 0
 
-                this.profit(item)
+            )
 
-            };
+        );
 
-        });
-
-    }
-
-};
-
-export default investmentAgent;
+    },
