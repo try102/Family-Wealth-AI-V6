@@ -1,16 +1,12 @@
 /*
 
- 
-
 Family Wealth AI OS
 
-V5.5
+V6.0 Development Build001
 
 Liability Agent
 
-家庭负债管理模块
-
-资产负债表扩展版
+家庭负债管理核心模块
 
 */
 
@@ -18,7 +14,7 @@ const liabilityAgent = {
 
     name:
 
-    "Liability Agent V5.5",
+    "Liability Agent V6.0",
 
     // ======================
 
@@ -30,13 +26,17 @@ const liabilityAgent = {
 
         if(
 
-            !localStorage.getItem("liabilities")
+            !localStorage.getItem(
+
+                "wealth_liabilities"
+
+            )
 
         ){
 
             localStorage.setItem(
 
-                "liabilities",
+                "wealth_liabilities",
 
                 JSON.stringify([])
 
@@ -44,13 +44,13 @@ const liabilityAgent = {
 
         }
 
-        return "Liability Agent Ready";
+        return "Liability Ready";
 
     },
 
     // ======================
 
-    // 读取数据
+    // 获取数据
 
     // ======================
 
@@ -58,7 +58,11 @@ const liabilityAgent = {
 
         return JSON.parse(
 
-            localStorage.getItem("liabilities")
+            localStorage.getItem(
+
+                "wealth_liabilities"
+
+            )
 
             ||
 
@@ -78,7 +82,7 @@ const liabilityAgent = {
 
         localStorage.setItem(
 
-            "liabilities",
+            "wealth_liabilities",
 
             JSON.stringify(data)
 
@@ -94,7 +98,7 @@ const liabilityAgent = {
 
     add(liability){
 
-        let liabilities =
+        let list =
 
         this.getData();
 
@@ -112,22 +116,6 @@ const liabilityAgent = {
 
             liability.category || "其他",
 
-            type:
-
-            liability.type || "",
-
-            owner:
-
-            liability.owner || "",
-
-            institution:
-
-            liability.institution || "",
-
-            currency:
-
-            liability.currency || "CNY",
-
             principal:
 
             Number(
@@ -136,11 +124,11 @@ const liabilityAgent = {
 
             ),
 
-            interestRate:
+            interest:
 
             Number(
 
-                liability.interestRate || 0
+                liability.interest || 0
 
             ),
 
@@ -156,9 +144,9 @@ const liabilityAgent = {
 
             liability.startDate || "",
 
-            dueDate:
+            endDate:
 
-            liability.dueDate || "",
+            liability.endDate || "",
 
             note:
 
@@ -166,9 +154,9 @@ const liabilityAgent = {
 
         };
 
-        liabilities.push(item);
+        list.push(item);
 
-        this.save(liabilities);
+        this.save(list);
 
         return item;
 
@@ -194,23 +182,25 @@ const liabilityAgent = {
 
     edit(id,newData){
 
-        let liabilities =
+        let list =
 
         this.getData();
 
         let index =
 
-        liabilities.findIndex(
+        list.findIndex(
 
-            item => item.id === id
+            item=>
+
+            item.id===id
 
         );
 
-        if(index !== -1){
+        if(index!==-1){
 
-            liabilities[index]={
+            list[index]={
 
-                ...liabilities[index],
+                ...list[index],
 
                 ...newData
 
@@ -218,9 +208,9 @@ const liabilityAgent = {
 
         }
 
-        this.save(liabilities);
+        this.save(list);
 
-        return liabilities;
+        return list;
 
     },
 
@@ -232,39 +222,41 @@ const liabilityAgent = {
 
     delete(id){
 
-        let liabilities =
+        let list =
 
         this.getData();
 
-        liabilities =
+        list =
 
-        liabilities.filter(
+        list.filter(
 
-            item => item.id !== id
+            item=>
+
+            item.id!==id
 
         );
 
-        this.save(liabilities);
+        this.save(list);
 
-        return "删除成功";
+        return "deleted";
 
     },
 
     // ======================
 
-    // 负债汇总
+    // 汇总
 
     // ======================
 
     summary(){
 
-        let liabilities =
+        let list =
 
         this.getData();
 
-        let totalLiability = 0;
+        let totalLiability=0;
 
-        liabilities.forEach(item=>{
+        list.forEach(item=>{
 
             totalLiability +=
 
@@ -276,61 +268,15 @@ const liabilityAgent = {
 
         });
 
-        return{
+        return {
 
             count:
 
-            liabilities.length,
-
-            totalLiability:
+            list.length,
 
             totalLiability
 
         };
-
-    },
-
-    // ======================
-
-    // 负债率
-
-    // ======================
-
-    debtRatio(totalAssets){
-
-        let liability =
-
-        this.summary()
-
-        .totalLiability;
-
-        if(
-
-            !totalAssets
-
-        ){
-
-            return 0;
-
-        }
-
-        return Number(
-
-            (
-
-                liability
-
-                /
-
-                totalAssets
-
-                *
-
-                100
-
-            ).toFixed(2)
-
-        );
 
     }
 
