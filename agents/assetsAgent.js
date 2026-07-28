@@ -2,11 +2,13 @@
 
 Family Wealth AI OS
 
-V6.0 Development Build001
+V6.1 Stable Compatible Build
 
 Assets Agent
 
-资产管理核心模块
+资产管理兼容版
+
+兼容 V5.4 数据结构
 
 */
 
@@ -14,7 +16,7 @@ const assetsAgent = {
 
     name:
 
-    "Assets Agent V6.0",
+    "Assets Agent V6.1 Stable",
 
     // ======================
 
@@ -24,13 +26,43 @@ const assetsAgent = {
 
     init(){
 
+        let oldData =
+
+        localStorage.getItem(
+
+            "assets"
+
+        );
+
+        let newData =
+
+        localStorage.getItem(
+
+            "wealth_assets"
+
+        );
+
+        // 优先迁移旧稳定版本数据
+
         if(
 
-            !localStorage.getItem(
+            oldData
 
-                "wealth_assets"
+        ){
 
-            )
+            localStorage.setItem(
+
+                "wealth_assets",
+
+                oldData
+
+            );
+
+        }
+
+        else if(
+
+            !newData
 
         ){
 
@@ -56,17 +88,31 @@ const assetsAgent = {
 
     getData(){
 
-        return JSON.parse(
+        let data =
+
+        localStorage.getItem(
+
+            "wealth_assets"
+
+        );
+
+        // 兼容 V5.4
+
+        if(!data){
+
+            data =
 
             localStorage.getItem(
 
-                "wealth_assets"
+                "assets"
 
-            )
+            );
 
-            ||
+        }
 
-            "[]"
+        return JSON.parse(
+
+            data || "[]"
 
         );
 
@@ -74,7 +120,7 @@ const assetsAgent = {
 
     // ======================
 
-    // 保存数据
+    // 保存
 
     // ======================
 
@@ -88,17 +134,27 @@ const assetsAgent = {
 
         );
 
+        // 同步旧格式
+
+        localStorage.setItem(
+
+            "assets",
+
+            JSON.stringify(data)
+
+        );
+
     },
 
     // ======================
 
-    // 新增资产
+    // 添加资产
 
     // ======================
 
     add(asset){
 
-        let assets =
+        let list =
 
         this.getData();
 
@@ -116,13 +172,9 @@ const assetsAgent = {
 
             asset.category || "其他",
 
-            value:
+            type:
 
-            Number(
-
-                asset.value || 0
-
-            ),
+            asset.type || "",
 
             owner:
 
@@ -136,15 +188,31 @@ const assetsAgent = {
 
             asset.currency || "CNY",
 
+            institution:
+
+            asset.institution || "",
+
+            account:
+
+            asset.account || "",
+
+            value:
+
+            Number(
+
+                asset.value || 0
+
+            ),
+
             note:
 
             asset.note || ""
 
         };
 
-        assets.push(item);
+        list.push(item);
 
-        this.save(assets);
+        this.save(list);
 
         return item;
 
@@ -170,25 +238,25 @@ const assetsAgent = {
 
     edit(id,newData){
 
-        let assets =
+        let list =
 
         this.getData();
 
         let index =
 
-        assets.findIndex(
+        list.findIndex(
 
-            item=>
+            item =>
 
-            item.id===id
+            item.id === id
 
         );
 
-        if(index!==-1){
+        if(index !== -1){
 
-            assets[index]={
+            list[index]={
 
-                ...assets[index],
+                ...list[index],
 
                 ...newData
 
@@ -196,9 +264,9 @@ const assetsAgent = {
 
         }
 
-        this.save(assets);
+        this.save(list);
 
-        return assets;
+        return list;
 
     },
 
@@ -210,21 +278,21 @@ const assetsAgent = {
 
     delete(id){
 
-        let assets =
+        let list =
 
         this.getData();
 
-        assets =
+        list =
 
-        assets.filter(
+        list.filter(
 
-            item=>
+            item =>
 
-            item.id!==id
+            item.id !== id
 
         );
 
-        this.save(assets);
+        this.save(list);
 
         return "deleted";
 
@@ -238,13 +306,13 @@ const assetsAgent = {
 
     summary(){
 
-        let assets =
+        let list =
 
         this.getData();
 
-        let totalValue=0;
+        let totalValue = 0;
 
-        assets.forEach(item=>{
+        list.forEach(item=>{
 
             totalValue +=
 
@@ -260,11 +328,49 @@ const assetsAgent = {
 
             count:
 
-            assets.length,
+            list.length,
 
             totalValue
 
         };
+
+    },
+
+    // ======================
+
+    // 配置分析接口
+
+    // ======================
+
+    allocationSummary(){
+
+        let result={};
+
+        this.getData()
+
+        .forEach(item=>{
+
+            let key =
+
+            item.category || "其他";
+
+            if(!result[key]){
+
+                result[key]=0;
+
+            }
+
+            result[key]+=
+
+            Number(
+
+                item.value || 0
+
+            );
+
+        });
+
+        return result;
 
     }
 
