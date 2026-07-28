@@ -1,1 +1,427 @@
+<!DOCTYPE html>
 
+<html lang="zh-CN">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Family Wealth AI OS V6.0
+
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+
+<h1>
+
+🏠 Family Wealth AI OS
+
+</h1>
+
+<p>
+
+V6.0 Development Build001
+
+</p>
+
+</header>
+
+<main>
+
+<!-- ======================
+
+财富驾驶舱
+
+====================== -->
+
+<section class="dashboard">
+
+<h2>
+
+📊 财富驾驶舱
+
+</h2>
+
+<div class="cards">
+
+<div class="card">
+
+<h3>
+
+净资产
+
+</h3>
+
+<p id="netWorth">
+
+¥0
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+总资产
+
+</h3>
+
+<p id="totalAssets">
+
+¥0
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+总负债
+
+</h3>
+
+<p id="totalLiability">
+
+¥0
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+年度收入
+
+</h3>
+
+<p id="totalIncome">
+
+¥0
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+投资收益
+
+</h3>
+
+<p id="investmentReturn">
+
+¥0
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+财富评分
+
+</h3>
+
+<p id="wealthScore">
+
+0
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================
+
+资产中心
+
+====================== -->
+
+<section>
+
+<h2>
+
+🏦 资产中心
+
+</h2>
+
+<div class="form">
+
+<input id="assetName"
+
+placeholder="资产名称">
+
+<input id="assetCategory"
+
+placeholder="资产类别">
+
+<input id="assetValue"
+
+type="number"
+
+placeholder="资产价值">
+
+<button onclick="addNewAsset()">
+
+添加资产
+
+</button>
+
+</div>
+
+<div id="assetList">
+
+</div>
+
+</section>
+
+<!-- ======================
+
+负债中心
+
+====================== -->
+
+<section>
+
+<h2>
+
+💳 负债中心
+
+</h2>
+
+<div class="form">
+
+<input id="liabilityName"
+
+placeholder="负债名称">
+
+<input id="liabilityCategory"
+
+placeholder="负债类别">
+
+<input id="liabilityPrincipal"
+
+type="number"
+
+placeholder="本金">
+
+<input id="liabilityInterest"
+
+type="number"
+
+placeholder="利率">
+
+<button onclick="addNewLiability()">
+
+添加负债
+
+</button>
+
+</div>
+
+<div id="liabilityList">
+
+</div>
+
+</section>
+
+<!-- ======================
+
+收入中心
+
+====================== -->
+
+<section>
+
+<h2>
+
+💰 收入中心
+
+</h2>
+
+<div class="form">
+
+<input id="incomeName"
+
+placeholder="收入名称">
+
+<input id="incomeAmount"
+
+type="number"
+
+placeholder="金额">
+
+<button onclick="addIncome()">
+
+添加收入
+
+</button>
+
+</div>
+
+<div id="incomeList">
+
+</div>
+
+</section>
+
+<!-- ======================
+
+投资中心
+
+====================== -->
+
+<section>
+
+<h2>
+
+📈 投资中心
+
+</h2>
+
+<div class="form">
+
+<input id="investmentName"
+
+placeholder="投资名称">
+
+<input id="investmentTicker"
+
+placeholder="代码">
+
+<input id="investmentBuyPrice"
+
+type="number"
+
+placeholder="买入价格">
+
+<input id="investmentBuyQuantity"
+
+type="number"
+
+placeholder="数量">
+
+<input id="investmentCurrentPrice"
+
+type="number"
+
+placeholder="当前价格">
+
+<button onclick="addInvestment()">
+
+添加投资
+
+</button>
+
+</div>
+
+<div id="investmentList">
+
+</div>
+
+<div id="investmentDashboard">
+
+</div>
+
+</section>
+
+<!-- ======================
+
+AI CFO
+
+====================== -->
+
+<section>
+
+<h2>
+
+🤖 AI CFO
+
+</h2>
+
+<button onclick="generateCFOReport()">
+
+生成财富报告
+
+</button>
+
+<div id="cfoReport">
+
+</div>
+
+</section>
+
+<!-- ======================
+
+税务中心
+
+====================== -->
+
+<section>
+
+<h2>
+
+🧾 税务中心
+
+</h2>
+
+<div id="taxCenter">
+
+等待接入
+
+</div>
+
+</section>
+
+<!-- ======================
+
+退休中心
+
+====================== -->
+
+<section>
+
+<h2>
+
+🏖 退休中心
+
+</h2>
+
+<div id="retirementCenter">
+
+等待接入
+
+</div>
+
+</section>
+
+</main>
+
+<script type="module" src="app.js"></script>
+
+</body>
+
+</html>
