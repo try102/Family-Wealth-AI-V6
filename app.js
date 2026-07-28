@@ -272,9 +272,15 @@ function addNewAsset(){
 
     }
 
-    assetsAgent.add(asset);
+   let result = assetsAgent.add(asset);
 
-    refreshAll();
+alert(
+
+    "添加成功：" + JSON.stringify(result)
+
+);
+
+refreshAll();
 
 }
 
