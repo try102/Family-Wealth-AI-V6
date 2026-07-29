@@ -2,7 +2,7 @@
 
 Family Wealth AI OS
 
-V6.0.6 Stable Integration Build
+V6.2 Stable Liability Compatible Build
 
 Main Application
 
@@ -32,89 +32,29 @@ import retirementAgent from "./agents/retirementAgent.js";
 
 function startSystem(){
 
-    try{
+    assetsAgent.init();
 
-        assetsAgent.init();
+    incomeAgent.init();
 
-    }catch(e){
+    investmentAgent.init();
 
-        console.log(e);
+    liabilityAgent.init();
 
-    }
+    if(taxAgent.init){
 
-    try{
-
-        incomeAgent.init();
-
-    }catch(e){
-
-        console.log(e);
+        taxAgent.init();
 
     }
 
-    try{
+    if(retirementAgent.init){
 
-        investmentAgent.init();
-
-    }catch(e){
-
-        console.log(e);
+        retirementAgent.init();
 
     }
 
-    try{
+    if(cfoAgent.init){
 
-        if(liabilityAgent.init){
-
-            liabilityAgent.init();
-
-        }
-
-    }catch(e){
-
-        console.log(e);
-
-    }
-
-    try{
-
-        if(taxAgent.init){
-
-            taxAgent.init();
-
-        }
-
-    }catch(e){
-
-        console.log(e);
-
-    }
-
-    try{
-
-        if(retirementAgent.init){
-
-            retirementAgent.init();
-
-        }
-
-    }catch(e){
-
-        console.log(e);
-
-    }
-
-    try{
-
-        if(cfoAgent.init){
-
-            cfoAgent.init();
-
-        }
-
-    }catch(e){
-
-        console.log(e);
+        cfoAgent.init();
 
     }
 
@@ -152,85 +92,15 @@ function getValue(id){
 
 function refreshAll(){
 
-    try{
+    updateDashboard();
 
-        updateDashboard();
+    updateAssetDisplay();
 
-    }catch(e){
+    updateIncomeDisplay();
 
-        console.log(
+    updateInvestmentDisplay();
 
-            "dashboard error",
-
-            e
-
-        );
-
-    }
-
-    try{
-
-        updateAssetDisplay();
-
-    }catch(e){
-
-        console.log(
-
-            "asset error",
-
-            e
-
-        );
-
-    }
-
-    try{
-
-        updateIncomeDisplay();
-
-    }catch(e){
-
-        console.log(
-
-            "income error",
-
-            e
-
-        );
-
-    }
-
-    try{
-
-        updateInvestmentDisplay();
-
-    }catch(e){
-
-        console.log(
-
-            "investment error",
-
-            e
-
-        );
-
-    }
-
-    try{
-
-        updateLiabilityDisplay();
-
-    }catch(e){
-
-        console.log(
-
-            "liability error",
-
-            e
-
-        );
-
-    }
+    updateLiabilityDisplay();
 
 }
 
@@ -242,7 +112,7 @@ function refreshAll(){
 
 if(
 
-    document.readyState === "loading"
+document.readyState==="loading"
 
 ){
 
@@ -338,7 +208,7 @@ function updateDashboard(){
 
             if(id==="wealthScore"){
 
-                el.innerHTML =
+                el.innerHTML=
 
                 data[id];
 
@@ -346,13 +216,17 @@ function updateDashboard(){
 
             else{
 
-                el.innerHTML =
+                el.innerHTML=
 
-                "¥" +
+                "¥"+
 
                 Number(data[id])
 
-                .toLocaleString();
+                .toLocaleString(
+
+                    "zh-CN"
+
+                );
 
             }
 
@@ -410,7 +284,7 @@ function addNewAsset(){
 
 function updateAssetDisplay(){
 
-    let box =
+    let box=
 
     document.getElementById(
 
@@ -430,7 +304,7 @@ function updateAssetDisplay(){
 
     .forEach(item=>{
 
-        let div =
+        let div=
 
         document.createElement(
 
@@ -438,7 +312,7 @@ function updateAssetDisplay(){
 
         );
 
-        div.innerHTML = `
+        div.innerHTML=`
 
         <hr>
 
@@ -485,15 +359,10 @@ function updateAssetDisplay(){
     });
 
 }
-// ======================
-
-// 资产编辑删除
-
-// ======================
 
 function editAsset(id){
 
-    let item =
+    let item=
 
     assetsAgent.view()
 
@@ -509,7 +378,7 @@ function editAsset(id){
 
     }
 
-    let value =
+    let value=
 
     prompt(
 
@@ -552,7 +421,6 @@ function deleteAsset(id){
     }
 
 }
-
 // ======================
 
 // 收入中心
@@ -605,7 +473,7 @@ function addIncome(){
 
 function updateIncomeDisplay(){
 
-    let box =
+    let box=
 
     document.getElementById(
 
@@ -625,7 +493,7 @@ function updateIncomeDisplay(){
 
     .forEach(item=>{
 
-        let div =
+        let div=
 
         document.createElement(
 
@@ -633,7 +501,7 @@ function updateIncomeDisplay(){
 
         );
 
-        div.innerHTML = `
+        div.innerHTML=`
 
         <hr>
 
@@ -689,7 +557,7 @@ function updateIncomeDisplay(){
 
 function editIncome(id){
 
-    let item =
+    let item=
 
     incomeAgent.view()
 
@@ -705,7 +573,7 @@ function editIncome(id){
 
     }
 
-    let amount =
+    let amount=
 
     prompt(
 
@@ -813,11 +681,7 @@ function addInvestment(){
 
             getValue("investmentCurrentPrice")
 
-        ),
-
-        note:
-
-        getValue("investmentNote")
+        )
 
     };
 
@@ -845,7 +709,7 @@ function addInvestment(){
 
 function updateInvestmentDisplay(){
 
-    let box =
+    let box=
 
     document.getElementById(
 
@@ -865,7 +729,7 @@ function updateInvestmentDisplay(){
 
     .forEach(item=>{
 
-        let div =
+        let div=
 
         document.createElement(
 
@@ -873,7 +737,7 @@ function updateInvestmentDisplay(){
 
         );
 
-        div.innerHTML = `
+        div.innerHTML=`
 
         <hr>
 
@@ -897,13 +761,7 @@ function updateInvestmentDisplay(){
 
         买入价格：
 
-        ¥${Number(
-
-            item.buyPrice || 0
-
-        )
-
-        .toLocaleString()}
+        ¥${item.buyPrice || 0}
 
         <br>
 
@@ -921,13 +779,7 @@ function updateInvestmentDisplay(){
 
         卖出价格：
 
-        ¥${Number(
-
-            item.sellPrice || 0
-
-        )
-
-        .toLocaleString()}
+        ¥${item.sellPrice || 0}
 
         <br>
 
@@ -991,12 +843,6 @@ function updateInvestmentDisplay(){
 
         <br><br>
 
-        <button onclick="editInvestment(${item.id})">
-
-        编辑
-
-        </button>
-
         <button onclick="deleteInvestment(${item.id})">
 
         删除
@@ -1008,56 +854,6 @@ function updateInvestmentDisplay(){
         box.appendChild(div);
 
     });
-
-}
-
-function editInvestment(id){
-
-    let item =
-
-    investmentAgent.view()
-
-    .find(
-
-        x=>x.id===id
-
-    );
-
-    if(!item){
-
-        return;
-
-    }
-
-    let price =
-
-    prompt(
-
-        "修改当前价格",
-
-        item.currentPrice
-
-    );
-
-    if(price!==null){
-
-        investmentAgent.edit(
-
-            id,
-
-            {
-
-                currentPrice:
-
-                Number(price)
-
-            }
-
-        );
-
-        refreshAll();
-
-    }
 
 }
 
@@ -1077,6 +873,118 @@ function deleteInvestment(id){
 // 负债中心
 
 // ======================
+
+function updateLiabilityDisplay(){
+
+    let box =
+
+    document.getElementById(
+
+        "liabilityList"
+
+    );
+
+    if(!box){
+
+        return;
+
+    }
+
+    box.innerHTML="";
+
+    liabilityAgent.view()
+
+    .forEach(item=>{
+
+        let annualInterest =
+
+        Number(item.principal || 0)
+
+        *
+
+        Number(item.interest || 0)
+
+        /
+
+        100;
+
+        let div =
+
+        document.createElement(
+
+            "div"
+
+        );
+
+        div.innerHTML = `
+
+        <hr>
+
+        <h3>
+
+        ${item.name}
+
+        </h3>
+
+        类别：
+
+        ${item.category || "其他"}
+
+        <br>
+
+        本金：
+
+        ¥${Number(
+
+            item.principal || 0
+
+        )
+
+        .toLocaleString("zh-CN")}
+
+        <br>
+
+        利率：
+
+        ${Number(
+
+            item.interest || 0
+
+        )}%
+
+        <br>
+
+        年度利息：
+
+        ¥${Number(
+
+            annualInterest
+
+        )
+
+        .toLocaleString("zh-CN")}
+
+        <br><br>
+
+        <button onclick="editLiability(${item.id})">
+
+        编辑
+
+        </button>
+
+        <button onclick="deleteLiability(${item.id})">
+
+        删除
+
+        </button>
+
+        `;
+
+        box.appendChild(div);
+
+    });
+
+}
 
 function addNewLiability(){
 
@@ -1120,99 +1028,63 @@ function addNewLiability(){
 
     }
 
-    if(liabilityAgent.add){
+    liabilityAgent.add(
 
-        liabilityAgent.add(
+        liability
 
-            liability
-
-        );
-
-    }
+    );
 
     refreshAll();
 
 }
 
-function updateLiabilityDisplay(){
+function editLiability(id){
 
-    let box =
-
-    document.getElementById(
-
-        "liabilityList"
-
-    );
-
-    if(!box){
-
-        return;
-
-    }
-
-    box.innerHTML="";
-
-    if(!liabilityAgent.view){
-
-        return;
-
-    }
+    let item =
 
     liabilityAgent.view()
 
-    .forEach(item=>{
+    .find(
 
-        let div =
+        x=>x.id===id
 
-        document.createElement(
+    );
 
-            "div"
+    if(!item){
+
+        return;
+
+    }
+
+    let amount =
+
+    prompt(
+
+        "修改负债本金",
+
+        item.principal
+
+    );
+
+    if(amount!==null){
+
+        liabilityAgent.edit(
+
+            id,
+
+            {
+
+                principal:
+
+                Number(amount)
+
+            }
 
         );
 
-        div.innerHTML=`
+        refreshAll();
 
-        <hr>
-
-        <h3>
-
-        ${item.name}
-
-        </h3>
-
-        类别：
-
-        ${item.category || "其他"}
-
-        <br>
-
-        金额：
-
-        ¥${Number(
-
-            item.principal ||
-
-            item.amount ||
-
-            0
-
-        )
-
-        .toLocaleString()}
-
-        <br><br>
-
-        <button onclick="deleteLiability(${item.id})">
-
-        删除
-
-        </button>
-
-        `;
-
-        box.appendChild(div);
-
-    });
+    }
 
 }
 
@@ -1220,11 +1092,7 @@ function deleteLiability(id){
 
     if(confirm("删除负债？")){
 
-        if(liabilityAgent.delete){
-
-            liabilityAgent.delete(id);
-
-        }
+        liabilityAgent.delete(id);
 
         refreshAll();
 
@@ -1286,7 +1154,7 @@ function generateCFOReport(){
 
     )
 
-    .toLocaleString()}
+    .toLocaleString("zh-CN")}
 
     <br>
 
@@ -1298,7 +1166,7 @@ function generateCFOReport(){
 
     )
 
-    .toLocaleString()}
+    .toLocaleString("zh-CN")}
 
     <br>
 
@@ -1310,7 +1178,7 @@ function generateCFOReport(){
 
     )
 
-    .toLocaleString()}
+    .toLocaleString("zh-CN")}
 
     <br>
 
@@ -1322,7 +1190,7 @@ function generateCFOReport(){
 
     )
 
-    .toLocaleString()}
+    .toLocaleString("zh-CN")}
 
     <br>
 
@@ -1334,7 +1202,7 @@ function generateCFOReport(){
 
     )
 
-    .toLocaleString()}
+    .toLocaleString("zh-CN")}
 
     <br>
 
@@ -1344,11 +1212,7 @@ function generateCFOReport(){
 
     <br><br>
 
-    <h4>
-
     AI建议
-
-    </h4>
 
     <ul>
 
@@ -1372,7 +1236,7 @@ function generateCFOReport(){
 
         :
 
-        "<li>持续优化资产配置</li>"
+        "<li>暂无建议</li>"
 
     }
 
@@ -1390,7 +1254,7 @@ function generateCFOReport(){
 
 function generateTaxReport(){
 
-    let box =
+    let box=
 
     document.getElementById(
 
@@ -1402,7 +1266,7 @@ function generateTaxReport(){
 
         box.innerHTML=
 
-        "税务中心 V6.1 接入";
+        "税务中心 V6.2 接入";
 
     }
 
@@ -1416,7 +1280,7 @@ function generateTaxReport(){
 
 function generateRetirementReport(){
 
-    let box =
+    let box=
 
     document.getElementById(
 
@@ -1428,7 +1292,7 @@ function generateRetirementReport(){
 
         box.innerHTML=
 
-        "退休规划中心 V6.1 接入";
+        "退休规划中心 V6.2 接入";
 
     }
 
@@ -1468,10 +1332,6 @@ window.addInvestment =
 
 addInvestment;
 
-window.editInvestment =
-
-editInvestment;
-
 window.deleteInvestment =
 
 deleteInvestment;
@@ -1479,6 +1339,10 @@ deleteInvestment;
 window.addNewLiability =
 
 addNewLiability;
+
+window.editLiability =
+
+editLiability;
 
 window.deleteLiability =
 
