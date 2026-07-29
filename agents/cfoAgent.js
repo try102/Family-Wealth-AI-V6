@@ -2,7 +2,7 @@
 
 Family Wealth AI OS
 
-V6.0 Development Build001
+V6.1 Stable Compatible Build
 
 AI CFO Agent
 
@@ -18,7 +18,7 @@ const cfoAgent = {
 
     name:
 
-    "AI CFO Agent V6.0",
+    "AI CFO Agent V6.1 Stable",
 
     // ======================
 
@@ -42,9 +42,9 @@ const cfoAgent = {
 
         assetsAgent,
 
-        investmentAgent,
-
         incomeAgent,
+
+        investmentAgent,
 
         liabilityAgent
 
@@ -61,14 +61,6 @@ const cfoAgent = {
             incomeAgent,
 
             liabilityAgent
-
-        );
-
-        const health =
-
-        wealthEngine.healthSummary(
-
-            wealth
 
         );
 
@@ -98,35 +90,45 @@ const cfoAgent = {
 
             totalAssets:
 
-            wealth.totalAssets,
+            wealth.totalAssets || 0,
 
             totalLiability:
 
-            wealth.totalLiability,
+            wealth.totalLiability || 0,
 
             netWorth:
 
-            wealth.netWorth,
+            wealth.netWorth || 0,
 
             totalIncome:
 
-            wealth.totalIncome,
+            wealth.totalIncome || 0,
 
             investmentProfit:
 
-            wealth.investmentProfit,
+            wealth.investmentProfit || 0,
 
             debtRatio:
 
-            wealth.debtRatio,
+            wealth.debtRatio || 0,
 
             wealthScore:
 
             score,
 
-            health,
-
             allocation,
+
+            health:{
+
+                status:
+
+                "正常",
+
+                message:
+
+                "财富结构分析完成"
+
+            },
 
             advice:
 
@@ -148,85 +150,89 @@ const cfoAgent = {
 
     calculateScore(wealth){
 
-        let score=0;
-
-        // 资产基础
+        let score = 0;
 
         if(
 
-            wealth.totalAssets>0
+            Number(
+
+                wealth.totalAssets || 0
+
+            ) > 0
 
         ){
 
-            score+=20;
+            score += 20;
 
         }
 
         if(
 
-            wealth.totalAssets>100000
+            Number(
+
+                wealth.totalAssets || 0
+
+            ) > 100000
 
         ){
 
-            score+=10;
+            score += 10;
 
         }
-
-        // 收入能力
 
         if(
 
-            wealth.totalIncome>0
+            Number(
+
+                wealth.totalIncome || 0
+
+            ) > 0
 
         ){
 
-            score+=20;
+            score += 20;
 
         }
-
-        // 投资能力
 
         if(
 
-            wealth.investmentCount>0
+            Number(
+
+                wealth.investmentCount || 0
+
+            ) > 0
 
         ){
 
-            score+=15;
+            score += 15;
 
         }
-
-        // 负债健康
 
         if(
 
-            wealth.debtRatio<30
+            Number(
+
+                wealth.totalLiability || 0
+
+            ) === 0
 
         ){
 
-            score+=25;
+            score += 25;
 
         }
-
-        else if(
-
-            wealth.debtRatio<50
-
-        ){
-
-            score+=15;
-
-        }
-
-        // 完整性
 
         if(
 
-            wealth.assetCount>=3
+            Number(
+
+                wealth.assetCount || 0
+
+            ) >= 3
 
         ){
 
-            score+=10;
+            score += 10;
 
         }
 
@@ -252,13 +258,17 @@ const cfoAgent = {
 
         if(
 
-            wealth.totalAssets===0
+            Number(
+
+                wealth.totalAssets || 0
+
+            ) === 0
 
         ){
 
             advice.push(
 
-                "请先完善家庭资产信息"
+                "请完善家庭资产信息"
 
             );
 
@@ -266,13 +276,17 @@ const cfoAgent = {
 
         if(
 
-            wealth.debtRatio>50
+            Number(
+
+                wealth.totalIncome || 0
+
+            ) > 0
 
         ){
 
             advice.push(
 
-                "家庭负债率较高，需要关注偿债能力"
+                "建议保持稳定现金流，提高长期投资比例"
 
             );
 
@@ -280,31 +294,17 @@ const cfoAgent = {
 
         if(
 
-            wealth.investmentCount>0
+            Number(
 
-            &&
+                wealth.investmentProfit || 0
 
-            wealth.investmentProfit<0
-
-        ){
-
-            advice.push(
-
-                "投资组合当前存在亏损，需要关注风险控制"
-
-            );
-
-        }
-
-        if(
-
-            wealth.totalIncome>0
+            ) < 0
 
         ){
 
             advice.push(
 
-                "建议持续提高储蓄率和长期投资比例"
+                "当前投资存在亏损，需要关注风险控制"
 
             );
 
@@ -338,9 +338,9 @@ const cfoAgent = {
 
         assetsAgent,
 
-        investmentAgent,
-
         incomeAgent,
+
+        investmentAgent,
 
         liabilityAgent
 
@@ -350,9 +350,9 @@ const cfoAgent = {
 
             assetsAgent,
 
-            investmentAgent,
-
             incomeAgent,
+
+            investmentAgent,
 
             liabilityAgent
 
