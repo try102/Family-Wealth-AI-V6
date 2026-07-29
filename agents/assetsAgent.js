@@ -2,21 +2,21 @@
 
 Family Wealth AI OS
 
-V6.1 Stable Compatible Build
+V6.0 Recovery Build002
 
 Assets Agent
 
-资产管理兼容版
-
-兼容 V5.4 数据结构
+V6 独立数据存储版
 
 */
+
+const STORAGE_KEY = "wealth_assets_v6";
 
 const assetsAgent = {
 
     name:
 
-    "Assets Agent V6.1 Stable",
+    "Assets Agent V6.0 Isolated",
 
     // ======================
 
@@ -26,49 +26,19 @@ const assetsAgent = {
 
     init(){
 
-        let oldData =
+        let data =
 
         localStorage.getItem(
 
-            "assets"
+            STORAGE_KEY
 
         );
 
-        let newData =
-
-        localStorage.getItem(
-
-            "wealth_assets"
-
-        );
-
-        // 优先迁移旧稳定版本数据
-
-        if(
-
-            oldData
-
-        ){
+        if(!data){
 
             localStorage.setItem(
 
-                "wealth_assets",
-
-                oldData
-
-            );
-
-        }
-
-        else if(
-
-            !newData
-
-        ){
-
-            localStorage.setItem(
-
-                "wealth_assets",
+                STORAGE_KEY,
 
                 JSON.stringify([])
 
@@ -76,7 +46,7 @@ const assetsAgent = {
 
         }
 
-        return "Assets Ready";
+        return "Assets V6 Ready";
 
     },
 
@@ -92,23 +62,9 @@ const assetsAgent = {
 
         localStorage.getItem(
 
-            "wealth_assets"
+            STORAGE_KEY
 
         );
-
-        // 兼容 V5.4
-
-        if(!data){
-
-            data =
-
-            localStorage.getItem(
-
-                "assets"
-
-            );
-
-        }
 
         return JSON.parse(
 
@@ -120,7 +76,7 @@ const assetsAgent = {
 
     // ======================
 
-    // 保存
+    // 保存数据
 
     // ======================
 
@@ -128,17 +84,7 @@ const assetsAgent = {
 
         localStorage.setItem(
 
-            "wealth_assets",
-
-            JSON.stringify(data)
-
-        );
-
-        // 同步旧格式
-
-        localStorage.setItem(
-
-            "assets",
+            STORAGE_KEY,
 
             JSON.stringify(data)
 
@@ -158,7 +104,7 @@ const assetsAgent = {
 
         this.getData();
 
-        let item={
+        let item = {
 
             id:
 
@@ -254,7 +200,7 @@ const assetsAgent = {
 
         if(index !== -1){
 
-            list[index]={
+            list[index] = {
 
                 ...list[index],
 
@@ -338,13 +284,13 @@ const assetsAgent = {
 
     // ======================
 
-    // 配置分析接口
+    // 资产配置分析
 
     // ======================
 
     allocationSummary(){
 
-        let result={};
+        let result = {};
 
         this.getData()
 
@@ -360,7 +306,7 @@ const assetsAgent = {
 
             }
 
-            result[key]+=
+            result[key] +=
 
             Number(
 
