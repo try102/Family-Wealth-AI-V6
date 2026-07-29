@@ -2,7 +2,7 @@
 
 Family Wealth AI OS
 
-V6.0 Recovery Build003
+V6.0.6 Stable Integration Build
 
 Main Application
 
@@ -160,7 +160,7 @@ function refreshAll(){
 
         console.log(
 
-            "Dashboard error",
+            "dashboard error",
 
             e
 
@@ -176,7 +176,7 @@ function refreshAll(){
 
         console.log(
 
-            "Asset display error",
+            "asset error",
 
             e
 
@@ -192,7 +192,7 @@ function refreshAll(){
 
         console.log(
 
-            "Income display error",
+            "income error",
 
             e
 
@@ -208,7 +208,7 @@ function refreshAll(){
 
         console.log(
 
-            "Investment display error",
+            "investment error",
 
             e
 
@@ -224,7 +224,7 @@ function refreshAll(){
 
         console.log(
 
-            "Liability display error",
+            "liability error",
 
             e
 
@@ -767,6 +767,10 @@ function addInvestment(){
 
         getValue("investmentTicker"),
 
+        buyDate:
+
+        getValue("investmentBuyDate"),
+
         buyPrice:
 
         Number(
@@ -783,13 +787,37 @@ function addInvestment(){
 
         ),
 
+        sellDate:
+
+        getValue("investmentSellDate"),
+
+        sellPrice:
+
+        Number(
+
+            getValue("investmentSellPrice")
+
+        ),
+
+        sellQuantity:
+
+        Number(
+
+            getValue("investmentSellQuantity")
+
+        ),
+
         currentPrice:
 
         Number(
 
             getValue("investmentCurrentPrice")
 
-        )
+        ),
+
+        note:
+
+        getValue("investmentNote")
 
     };
 
@@ -845,7 +873,7 @@ function updateInvestmentDisplay(){
 
         );
 
-        div.innerHTML=`
+        div.innerHTML = `
 
         <hr>
 
@@ -861,13 +889,61 @@ function updateInvestmentDisplay(){
 
         <br>
 
-        数量：
+        买入日期：
+
+        ${item.buyDate || ""}
+
+        <br>
+
+        买入价格：
+
+        ¥${Number(
+
+            item.buyPrice || 0
+
+        )
+
+        .toLocaleString()}
+
+        <br>
+
+        买入数量：
 
         ${item.buyQuantity || 0}
 
         <br>
 
-        市值：
+        卖出日期：
+
+        ${item.sellDate || ""}
+
+        <br>
+
+        卖出价格：
+
+        ¥${Number(
+
+            item.sellPrice || 0
+
+        )
+
+        .toLocaleString()}
+
+        <br>
+
+        卖出数量：
+
+        ${item.sellQuantity || 0}
+
+        <br>
+
+        剩余数量：
+
+        ${item.remainingQuantity || 0}
+
+        <br>
+
+        当前市值：
 
         ¥${Number(
 
@@ -879,7 +955,31 @@ function updateInvestmentDisplay(){
 
         <br>
 
-        收益：
+        已实现收益：
+
+        ¥${Number(
+
+            item.realizedProfit || 0
+
+        )
+
+        .toLocaleString()}
+
+        <br>
+
+        未实现收益：
+
+        ¥${Number(
+
+            item.unrealizedProfit || 0
+
+        )
+
+        .toLocaleString()}
+
+        <br>
+
+        总收益：
 
         ¥${Number(
 
@@ -910,11 +1010,6 @@ function updateInvestmentDisplay(){
     });
 
 }
-// ======================
-
-// 投资编辑删除
-
-// ======================
 
 function editInvestment(id){
 
@@ -977,12 +1072,67 @@ function deleteInvestment(id){
     }
 
 }
-
 // ======================
 
 // 负债中心
 
 // ======================
+
+function addNewLiability(){
+
+    let liability={
+
+        name:
+
+        getValue("liabilityName"),
+
+        category:
+
+        getValue("liabilityCategory"),
+
+        principal:
+
+        Number(
+
+            getValue("liabilityPrincipal")
+
+        ),
+
+        interest:
+
+        Number(
+
+            getValue("liabilityInterest")
+
+        )
+
+    };
+
+    if(!liability.name){
+
+        alert(
+
+            "请输入负债名称"
+
+        );
+
+        return;
+
+    }
+
+    if(liabilityAgent.add){
+
+        liabilityAgent.add(
+
+            liability
+
+        );
+
+    }
+
+    refreshAll();
+
+}
 
 function updateLiabilityDisplay(){
 
@@ -1070,7 +1220,11 @@ function deleteLiability(id){
 
     if(confirm("删除负债？")){
 
-        liabilityAgent.delete(id);
+        if(liabilityAgent.delete){
+
+            liabilityAgent.delete(id);
+
+        }
 
         refreshAll();
 
@@ -1180,15 +1334,15 @@ function generateCFOReport(){
 
     )
 
-    .toLocaleString()
+    .toLocaleString()}
 
-    }
-
-    <br><br>
+    <br>
 
     财富评分：
 
     ${report.wealthScore || 0}
+
+    <br><br>
 
     <h4>
 
@@ -1218,7 +1372,7 @@ function generateCFOReport(){
 
         :
 
-        "<li>建议持续提高储蓄率和长期投资比例</li>"
+        "<li>持续优化资产配置</li>"
 
     }
 
@@ -1246,7 +1400,7 @@ function generateTaxReport(){
 
     if(box){
 
-        box.innerHTML =
+        box.innerHTML=
 
         "税务中心 V6.1 接入";
 
@@ -1272,7 +1426,7 @@ function generateRetirementReport(){
 
     if(box){
 
-        box.innerHTML =
+        box.innerHTML=
 
         "退休规划中心 V6.1 接入";
 
@@ -1321,6 +1475,10 @@ editInvestment;
 window.deleteInvestment =
 
 deleteInvestment;
+
+window.addNewLiability =
+
+addNewLiability;
 
 window.deleteLiability =
 
