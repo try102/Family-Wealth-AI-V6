@@ -1126,19 +1126,21 @@ function deleteLiability(id){
 
 // ======================
 
-let report =
+function generateCFOReport(){
 
-cfoAgent.report(
+    let report =
 
-    assetsAgent,
+    cfoAgent.report(
 
-    investmentAgent,
-    
-    incomeAgent,
+        assetsAgent,
 
-    liabilityAgent
+        investmentAgent,
 
-);
+        incomeAgent,
+
+        liabilityAgent
+
+    );
 
     let box =
 
@@ -1234,9 +1236,7 @@ cfoAgent.report(
 
         .map(
 
-            x=>
-
-            `<li>${x}</li>`
+            x=>`<li>${x}</li>`
 
         )
 
