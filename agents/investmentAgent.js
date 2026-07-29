@@ -2,13 +2,13 @@
 
 Family Wealth AI OS
 
-V6.1 Stable Transaction Build
+V6.2 Stable Upgrade
 
 Investment Agent
 
-投资交易账本兼容版
+投资管理升级版
 
-兼容 V5.4.1
+兼容 V5.4.1 / V6.1
 
 */
 
@@ -16,7 +16,7 @@ const investmentAgent = {
 
     name:
 
-    "Investment Agent V6.1 Stable",
+    "Investment Agent V6.2 Upgrade",
 
     // ======================
 
@@ -94,114 +94,6 @@ const investmentAgent = {
 
     // ======================
 
-    // 剩余数量
-
-    // ======================
-
-    remainingQuantity(item){
-
-        return (
-
-            Number(
-
-                item.buyQuantity || 0
-
-            )
-
-            -
-
-            Number(
-
-                item.sellQuantity || 0
-
-            )
-
-        );
-
-    },
-
-    // ======================
-
-    // 买入成本
-
-    // ======================
-
-    buyAmount(item){
-
-        return (
-
-            Number(
-
-                item.buyPrice || 0
-
-            )
-
-            *
-
-            Number(
-
-                item.buyQuantity || 0
-
-            )
-
-        );
-
-    },
-
-    // ======================
-
-    // 卖出金额
-
-    // ======================
-
-    sellAmount(item){
-
-        return (
-
-            Number(
-
-                item.sellPrice || 0
-
-            )
-
-            *
-
-            Number(
-
-                item.sellQuantity || 0
-
-            )
-
-        );
-
-    },
-
-    // ======================
-
-    // 当前市值
-
-    // ======================
-
-    marketValue(item){
-
-        return (
-
-            this.remainingQuantity(item)
-
-            *
-
-            Number(
-
-                item.currentPrice || 0
-
-            )
-
-        );
-
-    },
-
-    // ======================
-
     // 添加投资
 
     // ======================
@@ -229,14 +121,6 @@ const investmentAgent = {
             type:
 
             data.type || "股票",
-
-            market:
-
-            data.market || "",
-
-            currency:
-
-            data.currency || "USD",
 
             buyDate:
 
@@ -314,6 +198,216 @@ const investmentAgent = {
 
     // ======================
 
+    // 剩余数量
+
+    // ======================
+
+    remainingQuantity(item){
+
+        return (
+
+            Number(item.buyQuantity || 0)
+
+            -
+
+            Number(item.sellQuantity || 0)
+
+        );
+
+    },
+
+    // ======================
+
+    // 成本
+
+    // ======================
+
+    cost(item){
+
+        return (
+
+            Number(item.buyPrice || 0)
+
+            *
+
+            Number(item.buyQuantity || 0)
+
+        );
+
+    },
+
+    // ======================
+
+    // 当前市值
+
+    // ======================
+
+    marketValue(item){
+
+        return (
+
+            this.remainingQuantity(item)
+
+            *
+
+            Number(item.currentPrice || 0)
+
+        );
+
+    },
+
+    // ======================
+
+    // 已实现收益
+
+    // ======================
+
+    realizedProfit(item){
+
+        return (
+
+            Number(item.sellPrice || 0)
+
+            -
+
+            Number(item.buyPrice || 0)
+
+        )
+
+        *
+
+        Number(item.sellQuantity || 0);
+
+    },
+
+    // ======================
+
+    // 未实现收益
+
+    // ======================
+
+    unrealizedProfit(item){
+
+        return (
+
+            Number(item.currentPrice || 0)
+
+            -
+
+            Number(item.buyPrice || 0)
+
+        )
+
+        *
+
+        this.remainingQuantity(item);
+
+    },
+
+    // ======================
+
+    // 单项分析
+
+    // ======================
+
+    analyze(item){
+
+        let cost =
+
+        this.cost(item);
+
+        let realized =
+
+        this.realizedProfit(item);
+
+        let unrealized =
+
+        this.unrealizedProfit(item);
+
+        let total =
+
+        realized
+
+        +
+
+        unrealized;
+
+        return {
+
+            ...item,
+
+            remainingQuantity:
+
+            this.remainingQuantity(item),
+
+            marketValue:
+
+            this.marketValue(item),
+
+            cost,
+
+            realizedProfit:
+
+            realized,
+
+            unrealizedProfit:
+
+            unrealized,
+
+            totalProfit:
+
+            total,
+
+            returnRate:
+
+            cost>0
+
+            ?
+
+            (
+
+                total
+
+                /
+
+                cost
+
+                *
+
+                100
+
+            ).toFixed(2)
+
+            :
+
+            0
+
+        };
+
+    },
+
+    // ======================
+
+    // 持仓
+
+    // ======================
+
+    inventory(){
+
+        return this.getData()
+
+        .map(
+
+            item=>
+
+            this.analyze(item)
+
+        );
+
+    },
+
+    // ======================
+
     // 编辑
 
     // ======================
@@ -328,9 +422,9 @@ const investmentAgent = {
 
         list.findIndex(
 
-            item=>
+            x=>
 
-            item.id===id
+            x.id===id
 
         );
 
@@ -368,113 +462,15 @@ const investmentAgent = {
 
         list.filter(
 
-            item=>
+            x=>
 
-            item.id!==id
+            x.id!==id
 
         );
 
         this.save(list);
 
         return "deleted";
-
-    },
-
-    // ======================
-
-    // 单项分析
-
-    // ======================
-
-    analyzeItem(item){
-
-        let remain =
-
-        this.remainingQuantity(item);
-
-        let value =
-
-        this.marketValue(item);
-
-        let cost =
-
-        this.buyAmount(item);
-
-        let unrealized =
-
-        value -
-
-        (
-
-            Number(item.buyPrice || 0)
-
-            *
-
-            remain
-
-        );
-
-        let realized =
-
-        (
-
-            Number(item.sellPrice || 0)
-
-            -
-
-            Number(item.buyPrice || 0)
-
-        )
-
-        *
-
-        Number(item.sellQuantity || 0);
-
-        return {
-
-            ...item,
-
-            remainingQuantity:
-
-            remain,
-
-            marketValue:
-
-            value,
-
-            unrealizedProfit:
-
-            unrealized,
-
-            realizedProfit:
-
-            realized,
-
-            totalProfit:
-
-            realized + unrealized
-
-        };
-
-    },
-
-    // ======================
-
-    // 持仓
-
-    // ======================
-
-    inventory(){
-
-        return this.getData()
-
-        .map(
-
-            item=>
-
-            this.analyzeItem(item)
-
-        );
 
     },
 
@@ -488,7 +484,7 @@ const investmentAgent = {
 
         let list =
 
-        this.getData();
+        this.inventory();
 
         let totalValue=0;
 
@@ -500,17 +496,27 @@ const investmentAgent = {
 
             totalValue +=
 
-            this.marketValue(item);
+            Number(
+
+                item.marketValue || 0
+
+            );
 
             totalCost +=
 
-            this.buyAmount(item);
+            Number(
+
+                item.cost || 0
+
+            );
 
             profit +=
 
-            this.analyzeItem(item)
+            Number(
 
-            .totalProfit;
+                item.totalProfit || 0
+
+            );
 
         });
 
@@ -534,9 +540,13 @@ const investmentAgent = {
 
             (
 
-                profit /
+                profit
 
-                totalCost *
+                /
+
+                totalCost
+
+                *
 
                 100
 
@@ -564,15 +574,9 @@ const investmentAgent = {
 
             "中",
 
-            maxRatio:
+            advice:[
 
-            0,
-
-            advice:
-
-            [
-
-                "继续关注投资集中度"
+                "关注投资集中度"
 
             ]
 
