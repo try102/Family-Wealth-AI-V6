@@ -709,7 +709,7 @@ function addInvestment(){
 
 function updateInvestmentDisplay(){
 
-    let box=
+    let box =
 
     document.getElementById(
 
@@ -729,7 +729,7 @@ function updateInvestmentDisplay(){
 
     .forEach(item=>{
 
-        let div=
+        let div =
 
         document.createElement(
 
@@ -737,7 +737,7 @@ function updateInvestmentDisplay(){
 
         );
 
-        div.innerHTML=`
+        div.innerHTML = `
 
         <hr>
 
@@ -761,7 +761,13 @@ function updateInvestmentDisplay(){
 
         买入价格：
 
-        ¥${item.buyPrice || 0}
+        ¥${Number(
+
+            item.buyPrice || 0
+
+        )
+
+        .toLocaleString("zh-CN")}
 
         <br>
 
@@ -769,7 +775,7 @@ function updateInvestmentDisplay(){
 
         ${item.buyQuantity || 0}
 
-        <br>
+        <br><br>
 
         卖出日期：
 
@@ -779,7 +785,13 @@ function updateInvestmentDisplay(){
 
         卖出价格：
 
-        ¥${item.sellPrice || 0}
+        ¥${Number(
+
+            item.sellPrice || 0
+
+        )
+
+        .toLocaleString("zh-CN")}
 
         <br>
 
@@ -787,7 +799,7 @@ function updateInvestmentDisplay(){
 
         ${item.sellQuantity || 0}
 
-        <br>
+        <br><br>
 
         剩余数量：
 
@@ -803,7 +815,7 @@ function updateInvestmentDisplay(){
 
         )
 
-        .toLocaleString()}
+        .toLocaleString("zh-CN")}
 
         <br>
 
@@ -815,7 +827,7 @@ function updateInvestmentDisplay(){
 
         )
 
-        .toLocaleString()}
+        .toLocaleString("zh-CN")}
 
         <br>
 
@@ -827,7 +839,7 @@ function updateInvestmentDisplay(){
 
         )
 
-        .toLocaleString()}
+        .toLocaleString("zh-CN")}
 
         <br>
 
@@ -839,9 +851,21 @@ function updateInvestmentDisplay(){
 
         )
 
-        .toLocaleString()}
+        .toLocaleString("zh-CN")}
+
+        <br>
+
+        收益率：
+
+        ${item.returnRate || 0}%
 
         <br><br>
+
+        <button onclick="editInvestment(${item.id})">
+
+        编辑
+
+        </button>
 
         <button onclick="deleteInvestment(${item.id})">
 
@@ -854,18 +878,6 @@ function updateInvestmentDisplay(){
         box.appendChild(div);
 
     });
-
-}
-
-function deleteInvestment(id){
-
-    if(confirm("删除投资记录？")){
-
-        investmentAgent.delete(id);
-
-        refreshAll();
-
-    }
 
 }
 // ======================
