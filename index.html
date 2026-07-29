@@ -10,7 +10,7 @@
 
 <title>
 
-Family Wealth AI OS V6.0
+Family Wealth AI OS V6.0.6
 
 </title>
 
@@ -30,15 +30,13 @@ Family Wealth AI OS V6.0
 
 <p>
 
-V6.0 Recovery Build003
+V6.0.6 Investment Upgrade
 
 </p>
 
 </header>
 
 <main>
-
-<!-- 财富驾驶舱 -->
 
 <section class="dashboard">
 
@@ -52,105 +50,55 @@ V6.0 Recovery Build003
 
 <div class="card">
 
-<h3>
+<h3>净资产</h3>
 
-净资产
-
-</h3>
-
-<p id="netWorth">
-
-¥0
-
-</p>
+<p id="netWorth">¥0</p>
 
 </div>
 
 <div class="card">
 
-<h3>
+<h3>总资产</h3>
 
-总资产
-
-</h3>
-
-<p id="totalAssets">
-
-¥0
-
-</p>
+<p id="totalAssets">¥0</p>
 
 </div>
 
 <div class="card">
 
-<h3>
+<h3>总负债</h3>
 
-总负债
-
-</h3>
-
-<p id="totalLiability">
-
-¥0
-
-</p>
+<p id="totalLiability">¥0</p>
 
 </div>
 
 <div class="card">
 
-<h3>
+<h3>年度收入</h3>
 
-年度收入
-
-</h3>
-
-<p id="totalIncome">
-
-¥0
-
-</p>
+<p id="totalIncome">¥0</p>
 
 </div>
 
 <div class="card">
 
-<h3>
+<h3>投资收益</h3>
 
-投资收益
-
-</h3>
-
-<p id="investmentReturn">
-
-¥0
-
-</p>
+<p id="investmentReturn">¥0</p>
 
 </div>
 
 <div class="card">
 
-<h3>
+<h3>财富评分</h3>
 
-财富评分
-
-</h3>
-
-<p id="wealthScore">
-
-0
-
-</p>
+<p id="wealthScore">0</p>
 
 </div>
 
 </div>
 
 </section>
-
-<!-- 资产中心 -->
 
 <section>
 
@@ -184,13 +132,9 @@ placeholder="资产价值">
 
 </div>
 
-<div id="assetList">
-
-</div>
+<div id="assetList"></div>
 
 </section>
-
-<!-- 负债中心 -->
 
 <section>
 
@@ -230,13 +174,9 @@ placeholder="利率">
 
 </div>
 
-<div id="liabilityList">
-
-</div>
+<div id="liabilityList"></div>
 
 </section>
-
-<!-- 收入中心 -->
 
 <section>
 
@@ -274,13 +214,9 @@ placeholder="金额">
 
 </div>
 
-<div id="incomeList">
-
-</div>
+<div id="incomeList"></div>
 
 </section>
-
-<!-- 投资中心 -->
 
 <section>
 
@@ -300,9 +236,15 @@ placeholder="投资名称">
 
 placeholder="代码">
 
+<label>
+
+买入日期
+
+</label>
+
 <input id="investmentBuyDate"
 
-placeholder="买入日期">
+type="date">
 
 <input id="investmentBuyPrice"
 
@@ -316,9 +258,15 @@ type="number"
 
 placeholder="买入数量">
 
+<label>
+
+卖出日期
+
+</label>
+
 <input id="investmentSellDate"
 
-placeholder="卖出日期">
+type="date">
 
 <input id="investmentSellPrice"
 
@@ -360,8 +308,6 @@ placeholder="备注">
 
 </section>
 
-<!-- AI CFO -->
-
 <section>
 
 <h2>
@@ -382,8 +328,6 @@ placeholder="备注">
 
 </section>
 
-<!-- 税务中心 -->
-
 <section>
 
 <h2>
@@ -399,8 +343,6 @@ placeholder="备注">
 </div>
 
 </section>
-
-<!-- 退休中心 -->
 
 <section>
 
