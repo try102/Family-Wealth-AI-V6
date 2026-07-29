@@ -1119,6 +1119,7 @@ function deleteLiability(id){
 // ======================
 
 function generateCFOReport(){
+    alert("CFO开始运行");
 
     let report =
 
