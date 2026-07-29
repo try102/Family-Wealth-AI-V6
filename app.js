@@ -1132,9 +1132,9 @@ cfoAgent.report(
 
     assetsAgent,
 
-    incomeAgent,
-
     investmentAgent,
+    
+    incomeAgent,
 
     liabilityAgent
 
