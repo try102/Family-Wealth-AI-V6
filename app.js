@@ -2,7 +2,7 @@
 
 Family Wealth AI OS
 
-V6.0.5 Stable Restore Build
+V6.0 Recovery Build003
 
 Main Application
 
@@ -32,33 +32,89 @@ import retirementAgent from "./agents/retirementAgent.js";
 
 function startSystem(){
 
-    assetsAgent.init();
+    try{
 
-    incomeAgent.init();
+        assetsAgent.init();
 
-    investmentAgent.init();
+    }catch(e){
 
-    if(liabilityAgent.init){
-
-        liabilityAgent.init();
+        console.log(e);
 
     }
 
-    if(taxAgent.init){
+    try{
 
-        taxAgent.init();
+        incomeAgent.init();
 
-    }
+    }catch(e){
 
-    if(retirementAgent.init){
-
-        retirementAgent.init();
+        console.log(e);
 
     }
 
-    if(cfoAgent.init){
+    try{
 
-        cfoAgent.init();
+        investmentAgent.init();
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+    try{
+
+        if(liabilityAgent.init){
+
+            liabilityAgent.init();
+
+        }
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+    try{
+
+        if(taxAgent.init){
+
+            taxAgent.init();
+
+        }
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+    try{
+
+        if(retirementAgent.init){
+
+            retirementAgent.init();
+
+        }
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+    try{
+
+        if(cfoAgent.init){
+
+            cfoAgent.init();
+
+        }
+
+    }catch(e){
+
+        console.log(e);
 
     }
 
@@ -74,7 +130,7 @@ function startSystem(){
 
 function getValue(id){
 
-    const el =
+    let el =
 
     document.getElementById(id);
 
@@ -96,21 +152,91 @@ function getValue(id){
 
 function refreshAll(){
 
-    updateDashboard();
+    try{
 
-    updateAssetDisplay();
+        updateDashboard();
 
-    updateIncomeDisplay();
+    }catch(e){
 
-    updateInvestmentDisplay();
+        console.log(
 
-    updateLiabilityDisplay();
+            "Dashboard error",
+
+            e
+
+        );
+
+    }
+
+    try{
+
+        updateAssetDisplay();
+
+    }catch(e){
+
+        console.log(
+
+            "Asset display error",
+
+            e
+
+        );
+
+    }
+
+    try{
+
+        updateIncomeDisplay();
+
+    }catch(e){
+
+        console.log(
+
+            "Income display error",
+
+            e
+
+        );
+
+    }
+
+    try{
+
+        updateInvestmentDisplay();
+
+    }catch(e){
+
+        console.log(
+
+            "Investment display error",
+
+            e
+
+        );
+
+    }
+
+    try{
+
+        updateLiabilityDisplay();
+
+    }catch(e){
+
+        console.log(
+
+            "Liability display error",
+
+            e
+
+        );
+
+    }
 
 }
 
 // ======================
 
-// 启动
+// 页面启动
 
 // ======================
 
@@ -222,7 +348,7 @@ function updateDashboard(){
 
                 el.innerHTML =
 
-                "¥"+
+                "¥" +
 
                 Number(data[id])
 
@@ -312,7 +438,7 @@ function updateAssetDisplay(){
 
         );
 
-        div.innerHTML=`
+        div.innerHTML = `
 
         <hr>
 
@@ -359,6 +485,11 @@ function updateAssetDisplay(){
     });
 
 }
+// ======================
+
+// 资产编辑删除
+
+// ======================
 
 function editAsset(id){
 
@@ -421,6 +552,7 @@ function deleteAsset(id){
     }
 
 }
+
 // ======================
 
 // 收入中心
@@ -501,7 +633,7 @@ function updateIncomeDisplay(){
 
         );
 
-        div.innerHTML=`
+        div.innerHTML = `
 
         <hr>
 
@@ -778,6 +910,11 @@ function updateInvestmentDisplay(){
     });
 
 }
+// ======================
+
+// 投资编辑删除
+
+// ======================
 
 function editInvestment(id){
 
@@ -840,6 +977,7 @@ function deleteInvestment(id){
     }
 
 }
+
 // ======================
 
 // 负债中心
@@ -864,11 +1002,7 @@ function updateLiabilityDisplay(){
 
     box.innerHTML="";
 
-    if(
-
-        !liabilityAgent.view
-
-    ){
+    if(!liabilityAgent.view){
 
         return;
 
@@ -1046,7 +1180,9 @@ function generateCFOReport(){
 
     )
 
-    .toLocaleString()}
+    .toLocaleString()
+
+    }
 
     <br><br>
 
