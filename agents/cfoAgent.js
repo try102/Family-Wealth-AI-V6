@@ -1,5 +1,7 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
 V6.2 Stable
@@ -142,51 +144,59 @@ const cfoAgent = {
 
     calculateScore(wealth){
 
-        let score=0;
+        let score = 0;
+
+        // 资产基础
 
         if(
 
-            wealth.totalAssets>0
+            wealth.totalAssets > 0
 
         ){
 
-            score+=20;
+            score += 20;
 
         }
 
         if(
 
-            wealth.totalAssets>100000
+            wealth.totalAssets > 100000
 
         ){
 
-            score+=10;
+            score += 10;
 
         }
+
+        // 收入能力
 
         if(
 
-            wealth.totalIncome>0
+            wealth.totalIncome > 0
 
         ){
 
-            score+=20;
+            score += 20;
 
         }
+
+        // 投资能力
 
         if(
 
-            wealth.investmentCount>0
+            wealth.investmentCount > 0
 
         ){
 
-            score+=15;
+            score += 15;
 
         }
+
+        // 负债健康
 
         let debtRatio =
 
-        wealth.totalAssets>0
+        wealth.totalAssets > 0
 
         ?
 
@@ -210,31 +220,33 @@ const cfoAgent = {
 
         if(
 
-            debtRatio<30
+            debtRatio < 30
 
         ){
 
-            score+=25;
+            score += 25;
 
         }
 
         else if(
 
-            debtRatio<50
+            debtRatio < 50
 
         ){
 
-            score+=15;
+            score += 15;
 
         }
 
+        // 资产完整度
+
         if(
 
-            wealth.assetCount>=3
+            wealth.assetCount >= 3
 
         ){
 
-            score+=10;
+            score += 10;
 
         }
 
@@ -256,11 +268,11 @@ const cfoAgent = {
 
     generateAdvice(wealth){
 
-        let advice=[];
+        let advice = [];
 
         if(
 
-            wealth.totalAssets===0
+            wealth.totalAssets === 0
 
         ){
 
@@ -274,7 +286,7 @@ const cfoAgent = {
 
         let debtRatio =
 
-        wealth.totalAssets>0
+        wealth.totalAssets > 0
 
         ?
 
@@ -298,7 +310,7 @@ const cfoAgent = {
 
         if(
 
-            debtRatio>50
+            debtRatio > 50
 
         ){
 
@@ -312,11 +324,11 @@ const cfoAgent = {
 
         if(
 
-            wealth.investmentCount>0
+            wealth.investmentCount > 0
 
             &&
 
-            wealth.investmentProfit>0
+            wealth.investmentProfit > 0
 
         ){
 
@@ -330,7 +342,7 @@ const cfoAgent = {
 
         if(
 
-            wealth.totalIncome>0
+            wealth.totalIncome > 0
 
         ){
 
@@ -344,7 +356,7 @@ const cfoAgent = {
 
         if(
 
-            advice.length===0
+            advice.length === 0
 
         ){
 
@@ -366,13 +378,17 @@ const cfoAgent = {
 
     // ======================
 
+    // 注意：
+
+    // 顺序必须和 app.js 一致
+
     report(
 
         assetsAgent,
 
-        incomeAgent,
-
         investmentAgent,
+
+        incomeAgent,
 
         liabilityAgent
 
