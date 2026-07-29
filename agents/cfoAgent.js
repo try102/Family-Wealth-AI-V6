@@ -12,9 +12,7 @@ AI CFO Agent
 
 */
 
-import wealthEngine
-
-from "./wealthEngine.js";
+import wealthEngine from "./wealthEngine.js";
 
 const cfoAgent = {
 
