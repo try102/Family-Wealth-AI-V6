@@ -2,7 +2,7 @@
 
 Family Wealth AI OS
 
-V6.1 Stable
+V6.2 Stable
 
 Liability Agent
 
@@ -14,7 +14,7 @@ const liabilityAgent = {
 
     name:
 
-    "Liability Agent V6.1 Stable",
+    "Liability Agent V6.2 Stable",
 
     // ======================
 
@@ -124,6 +124,8 @@ const liabilityAgent = {
 
             ),
 
+            // 6 = 6%
+
             interest:
 
             Number(
@@ -135,6 +137,14 @@ const liabilityAgent = {
             period:
 
             data.period || "",
+
+            owner:
+
+            data.owner || "",
+
+            currency:
+
+            data.currency || "CNY",
 
             note:
 
@@ -232,6 +242,46 @@ const liabilityAgent = {
 
     // ======================
 
+    // 单项分析
+
+    // ======================
+
+    analyze(item){
+
+        let principal =
+
+        Number(
+
+            item.principal || 0
+
+        );
+
+        let interest =
+
+        Number(
+
+            item.interest || 0
+
+        );
+
+        return {
+
+            ...item,
+
+            annualInterest:
+
+            principal *
+
+            interest /
+
+            100
+
+        };
+
+    },
+
+    // ======================
+
     // 汇总
 
     // ======================
@@ -242,15 +292,29 @@ const liabilityAgent = {
 
         this.getData();
 
-        let totalLiability=0;
+        let totalLiability = 0;
+
+        let annualInterest = 0;
 
         list.forEach(item=>{
+
+            let result =
+
+            this.analyze(item);
 
             totalLiability +=
 
             Number(
 
-                item.principal || 0
+                result.principal || 0
+
+            );
+
+            annualInterest +=
+
+            Number(
+
+                result.annualInterest || 0
 
             );
 
@@ -262,7 +326,9 @@ const liabilityAgent = {
 
             list.length,
 
-            totalLiability
+            totalLiability,
+
+            annualInterest
 
         };
 
