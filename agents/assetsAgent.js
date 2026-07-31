@@ -2,21 +2,41 @@
 
 Family Wealth AI OS
 
-V6.0 Recovery Build002
+V6.3.1 Upgrade Build
 
 Assets Agent
 
-V6 独立数据存储版
+Asset Classification System
+
+Compatible with V6.2 Data
 
 */
 
 const STORAGE_KEY = "wealth_assets_v6";
 
+const ASSET_CATEGORIES = [
+
+    "现金",
+
+    "房产",
+
+    "企业资产",
+
+    "保险",
+
+    "贵金属",
+
+    "收藏品",
+
+    "其他"
+
+];
+
 const assetsAgent = {
 
     name:
 
-    "Assets Agent V6.0 Isolated",
+    "Assets Agent V6.3.1 Classification",
 
     // ======================
 
@@ -46,7 +66,45 @@ const assetsAgent = {
 
         }
 
-        return "Assets V6 Ready";
+        return "Assets V6.3 Ready";
+
+    },
+
+    // ======================
+
+    // 分类列表
+
+    // ======================
+
+    categories(){
+
+        return ASSET_CATEGORIES;
+
+    },
+
+    // ======================
+
+    // 分类检查
+
+    // ======================
+
+    validateCategory(category){
+
+        if(
+
+            ASSET_CATEGORIES.includes(
+
+                category
+
+            )
+
+        ){
+
+            return category;
+
+        }
+
+        return "其他";
 
     },
 
@@ -76,7 +134,7 @@ const assetsAgent = {
 
     // ======================
 
-    // 保存数据
+    // 保存
 
     // ======================
 
@@ -116,7 +174,11 @@ const assetsAgent = {
 
             category:
 
-            asset.category || "其他",
+            this.validateCategory(
+
+                asset.category
+
+            ),
 
             type:
 
@@ -199,6 +261,18 @@ const assetsAgent = {
         );
 
         if(index !== -1){
+
+            if(newData.category){
+
+                newData.category =
+
+                this.validateCategory(
+
+                    newData.category
+
+                );
+
+            }
 
             list[index] = {
 
@@ -284,7 +358,7 @@ const assetsAgent = {
 
     // ======================
 
-    // 资产配置分析
+    // 分类配置分析
 
     // ======================
 
@@ -292,19 +366,27 @@ const assetsAgent = {
 
         let result = {};
 
+        ASSET_CATEGORIES.forEach(
+
+            category=>{
+
+                result[category]=0;
+
+            }
+
+        );
+
         this.getData()
 
         .forEach(item=>{
 
             let key =
 
-            item.category || "其他";
+            this.validateCategory(
 
-            if(!result[key]){
+                item.category
 
-                result[key]=0;
-
-            }
+            );
 
             result[key] +=
 
@@ -317,6 +399,64 @@ const assetsAgent = {
         });
 
         return result;
+
+    },
+
+    // ======================
+
+    // 分类比例
+
+    // 给 Wealth Engine 使用
+
+    // ======================
+
+    allocationRatio(){
+
+        let summary =
+
+        this.allocationSummary();
+
+        let total = 0;
+
+        Object.values(summary)
+
+        .forEach(value=>{
+
+            total += value;
+
+        });
+
+        let ratio = {};
+
+        Object.keys(summary)
+
+        .forEach(key=>{
+
+            ratio[key] =
+
+            total === 0 ?
+
+            0 :
+
+            Number(
+
+                (
+
+                summary[key] /
+
+                total *
+
+                100
+
+                )
+
+                .toFixed(2)
+
+            );
+
+        });
+
+        return ratio;
 
     }
 
