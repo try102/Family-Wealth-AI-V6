@@ -2,6 +2,8 @@ name: Deploy GitHub Pages
 
 on:
 
+  workflow_dispatch:
+
   push:
 
     branches:
@@ -15,6 +17,12 @@ permissions:
   pages: write
 
   id-token: write
+
+concurrency:
+
+  group: "pages"
+
+  cancel-in-progress: false
 
 jobs:
 
@@ -46,7 +54,7 @@ jobs:
 
           path: .
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
 
         id: deployment
 
