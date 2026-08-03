@@ -94,6 +94,8 @@ function refreshAll(){
 
     updateDashboard();
 
+    updateAllocationDisplay();
+
     updateAssetDisplay();
 
     updateIncomeDisplay();
@@ -235,7 +237,81 @@ function updateDashboard(){
     });
 
 }
+// ======================
 
+// 资产配置显示
+
+// V6.3.4
+
+// ======================
+
+function updateAllocationDisplay(){
+
+    let box =
+
+    document.getElementById(
+
+        "allocationAnalysis"
+
+    );
+
+    if(!box){
+
+        return;
+
+    }
+
+    let data =
+
+    wealthEngine.allocationAnalysis(
+
+        assetsAgent,
+
+        investmentAgent
+
+    );
+
+    if(
+
+        !data
+
+        ||
+
+        !data.ratio
+
+    ){
+
+        box.innerHTML =
+
+        "暂无资产配置数据";
+
+        return;
+
+    }
+
+    let html = "";
+
+    Object.keys(data.ratio)
+
+    .forEach(key=>{
+
+        html +=
+
+        `
+
+        ${key}：
+
+        ${data.ratio[key]}%
+
+        <br>
+
+        `;
+
+    });
+
+    box.innerHTML = html;
+
+}
 // ======================
 
 // 资产中心
