@@ -1,14 +1,12 @@
 /*
 
- 
-
 Family Wealth AI OS
 
-V6.2 Stable
+V6.3.3 Upgrade Build001
 
 AI CFO Agent
 
-家庭财富智能分析中心
+Asset Allocation Intelligence
 
 */
 
@@ -18,7 +16,7 @@ const cfoAgent = {
 
     name:
 
-    "AI CFO Agent V6.2 Stable",
+    "AI CFO Agent V6.3.3 Allocation Intelligence",
 
     // ======================
 
@@ -28,7 +26,7 @@ const cfoAgent = {
 
     init(){
 
-        return "AI CFO Ready";
+        return "AI CFO V6.3.3 Ready";
 
     },
 
@@ -67,6 +65,16 @@ const cfoAgent = {
         const allocation =
 
         wealthEngine.assetAllocation(
+
+            assetsAgent,
+
+            investmentAgent
+
+        );
+
+        const allocationAnalysis =
+
+        wealthEngine.allocationAnalysis(
 
             assetsAgent,
 
@@ -122,11 +130,15 @@ const cfoAgent = {
 
             allocation,
 
+            allocationAnalysis,
+
             advice:
 
             this.generateAdvice(
 
-                wealth
+                wealth,
+
+                allocationAnalysis
 
             )
 
@@ -143,8 +155,6 @@ const cfoAgent = {
     calculateScore(wealth){
 
         let score = 0;
-
-        // 资产基础
 
         if(
 
@@ -166,8 +176,6 @@ const cfoAgent = {
 
         }
 
-        // 收入能力
-
         if(
 
             wealth.totalIncome > 0
@@ -178,8 +186,6 @@ const cfoAgent = {
 
         }
 
-        // 投资能力
-
         if(
 
             wealth.investmentCount > 0
@@ -189,8 +195,6 @@ const cfoAgent = {
             score += 15;
 
         }
-
-        // 负债健康
 
         let debtRatio =
 
@@ -236,8 +240,6 @@ const cfoAgent = {
 
         }
 
-        // 资产完整度
-
         if(
 
             wealth.assetCount >= 3
@@ -260,11 +262,17 @@ const cfoAgent = {
 
     // ======================
 
-    // AI建议
+    // AI建议 V6.3.3
 
     // ======================
 
-    generateAdvice(wealth){
+    generateAdvice(
+
+        wealth,
+
+        allocationAnalysis
+
+    ){
 
         let advice = [];
 
@@ -279,6 +287,8 @@ const cfoAgent = {
                 "请完善家庭资产信息"
 
             );
+
+            return advice;
 
         }
 
@@ -352,6 +362,82 @@ const cfoAgent = {
 
         }
 
+        // ======================
+
+        // V6.3.3 资产配置分析
+
+        // ======================
+
+        if(
+
+            allocationAnalysis
+
+            &&
+
+            allocationAnalysis.ratio
+
+        ){
+
+            let ratio =
+
+            allocationAnalysis.ratio;
+
+            if(
+
+                ratio["房地产"]
+
+                >
+
+                60
+
+            ){
+
+                advice.push(
+
+                    "房地产资产占比较高，建议关注资产集中风险"
+
+                );
+
+            }
+
+            if(
+
+                ratio["现金"]
+
+                <
+
+                10
+
+            ){
+
+                advice.push(
+
+                    "现金比例偏低，建议保持一定流动资金"
+
+                );
+
+            }
+
+            if(
+
+                ratio["投资资产"]
+
+                >
+
+                0
+
+            ){
+
+                advice.push(
+
+                    "已建立投资资产配置，可持续优化长期收益结构"
+
+                );
+
+            }
+
+        }
+
         if(
 
             advice.length === 0
@@ -372,13 +458,9 @@ const cfoAgent = {
 
     // ======================
 
-    // 对外报告接口
+    // 对外接口
 
     // ======================
-
-    // 注意：
-
-    // 顺序必须和 app.js 一致
 
     report(
 
