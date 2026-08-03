@@ -4,13 +4,13 @@
 
 <head>
 
-<meta charset="UTF-8"> 
+<meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>
 
-Family Wealth AI OS V6.2
+Family Wealth AI OS V6.4
 
 </title>
 
@@ -20,27 +20,27 @@ Family Wealth AI OS V6.2
 
 <body>
 
-<header>
-
 <h1>
 
 🏠 Family Wealth AI OS
 
 </h1>
 
-<p>
+<h2>
 
-V6.2 Stable Build
+V6.4 Asset Classification Build
 
-</p>
+</h2>
 
-</header>
-
-<main>
+<!-- ====================== -->
 
 <!-- 财富驾驶舱 -->
 
+<!-- ====================== -->
+
 <section>
+
+<div class="card">
 
 <h2>
 
@@ -48,56 +48,79 @@ V6.2 Stable Build
 
 </h2>
 
-<div class="cards">
+<h3>
 
-<div class="card">
+净资产
 
-<h3>净资产</h3>
+</h3>
 
-<p id="netWorth">¥0</p>
+<p id="netWorth">
 
-</div>
+¥0
 
-<div class="card">
+</p>
 
-<h3>总资产</h3>
+<h3>
 
-<p id="totalAssets">¥0</p>
+总资产
 
-</div>
+</h3>
 
-<div class="card">
+<p id="totalAssets">
 
-<h3>总负债</h3>
+¥0
 
-<p id="totalLiability">¥0</p>
+</p>
 
-</div>
+<h3>
 
-<div class="card">
+总负债
 
-<h3>年度收入</h3>
+</h3>
 
-<p id="totalIncome">¥0</p>
+<p id="totalLiability">
 
-</div>
+¥0
 
-<div class="card">
+</p>
 
-<h3>投资收益</h3>
+<h3>
 
-<p id="investmentReturn">¥0</p>
+年度收入
 
-</div>
+</h3>
 
-<div class="card">
+<p id="totalIncome">
 
-<h3>财富评分</h3>
+¥0
 
-<p id="wealthScore">0</p>
+</p>
+
+<h3>
+
+投资收益
+
+</h3>
+
+<p id="investmentReturn">
+
+¥0
+
+</p>
+
+<h3>
+
+财富评分
+
+</h3>
+
+<p id="wealthScore">
+
+0
+
+</p>
+
 <!-- 资产配置分析 -->
-
-<div>
 
 <h3>
 
@@ -112,11 +135,16 @@ V6.2 Stable Build
 </div>
 
 </div>
-</div>
 
 </section>
 
+<!-- ====================== -->
+
 <!-- 资产中心 -->
+
+<!-- V6.4 -->
+
+<!-- ====================== -->
 
 <section>
 
@@ -128,7 +156,9 @@ V6.2 Stable Build
 
 <div class="form">
 
-<input id="assetName"
+<input
+
+id="assetName"
 
 placeholder="资产名称">
 
@@ -140,15 +170,15 @@ placeholder="资产名称">
 
 </option>
 
-<option value="房地产">
+<option value="房产">
 
-房地产
+房产
 
 </option>
 
-<option value="商业资产">
+<option value="企业资产">
 
-商业资产
+企业资产
 
 </option>
 
@@ -170,12 +200,6 @@ placeholder="资产名称">
 
 </option>
 
-<option value="投资资产">
-
-投资资产
-
-</option>
-
 <option value="其他">
 
 其他
@@ -183,7 +207,48 @@ placeholder="资产名称">
 </option>
 
 </select>
-<input id="assetValue"
+
+<input
+
+id="assetType"
+
+placeholder="资产类型">
+
+<input
+
+id="assetOwner"
+
+placeholder="所属人">
+
+<input
+
+id="assetCountry"
+
+placeholder="国家">
+
+<input
+
+id="assetCurrency"
+
+placeholder="币种"
+
+value="CNY">
+
+<input
+
+id="assetInstitution"
+
+placeholder="金融机构/机构">
+
+<input
+
+id="assetAccount"
+
+placeholder="账户信息">
+
+<input
+
+id="assetValue"
 
 type="number"
 
@@ -197,11 +262,16 @@ placeholder="资产价值">
 
 </div>
 
-<div id="assetList"></div>
+<div id="assetList">
+
+</div>
 
 </section>
+<!-- ====================== -->
 
 <!-- 负债中心 -->
+
+<!-- ====================== -->
 
 <section>
 
@@ -213,21 +283,29 @@ placeholder="资产价值">
 
 <div class="form">
 
-<input id="liabilityName"
+<input
+
+id="liabilityName"
 
 placeholder="负债名称">
 
-<input id="liabilityCategory"
+<input
+
+id="liabilityCategory"
 
 placeholder="负债类别">
 
-<input id="liabilityPrincipal"
+<input
+
+id="liabilityPrincipal"
 
 type="number"
 
-placeholder="本金">
+placeholder="负债本金">
 
-<input id="liabilityInterest"
+<input
+
+id="liabilityInterest"
 
 type="number"
 
@@ -241,11 +319,17 @@ placeholder="利率 %">
 
 </div>
 
-<div id="liabilityList"></div>
+<div id="liabilityList">
+
+</div>
 
 </section>
 
+<!-- ====================== -->
+
 <!-- 收入中心 -->
+
+<!-- ====================== -->
 
 <section>
 
@@ -257,23 +341,31 @@ placeholder="利率 %">
 
 <div class="form">
 
-<input id="incomeName"
+<input
+
+id="incomeName"
 
 placeholder="收入名称">
 
-<input id="incomeCategory"
+<input
+
+id="incomeCategory"
 
 placeholder="收入类别">
 
-<input id="incomeAmount"
+<input
+
+id="incomeSource"
+
+placeholder="收入来源">
+
+<input
+
+id="incomeAmount"
 
 type="number"
 
-placeholder="金额">
-
-<input id="incomeSource"
-
-placeholder="来源">
+placeholder="收入金额">
 
 <button onclick="addIncome()">
 
@@ -283,11 +375,17 @@ placeholder="来源">
 
 </div>
 
-<div id="incomeList"></div>
+<div id="incomeList">
+
+</div>
 
 </section>
 
+<!-- ====================== -->
+
 <!-- 投资中心 -->
+
+<!-- ====================== -->
 
 <section>
 
@@ -299,11 +397,15 @@ placeholder="来源">
 
 <div class="form">
 
-<input id="investmentName"
+<input
+
+id="investmentName"
 
 placeholder="投资名称">
 
-<input id="investmentTicker"
+<input
+
+id="investmentTicker"
 
 placeholder="代码">
 
@@ -313,17 +415,23 @@ placeholder="代码">
 
 </label>
 
-<input id="investmentBuyDate"
+<input
+
+id="investmentBuyDate"
 
 type="date">
 
-<input id="investmentBuyPrice"
+<input
+
+id="investmentBuyPrice"
 
 type="number"
 
 placeholder="买入价格">
 
-<input id="investmentBuyQuantity"
+<input
+
+id="investmentBuyQuantity"
 
 type="number"
 
@@ -335,23 +443,31 @@ placeholder="买入数量">
 
 </label>
 
-<input id="investmentSellDate"
+<input
+
+id="investmentSellDate"
 
 type="date">
 
-<input id="investmentSellPrice"
+<input
+
+id="investmentSellPrice"
 
 type="number"
 
 placeholder="卖出价格">
 
-<input id="investmentSellQuantity"
+<input
+
+id="investmentSellQuantity"
 
 type="number"
 
 placeholder="卖出数量">
 
-<input id="investmentCurrentPrice"
+<input
+
+id="investmentCurrentPrice"
 
 type="number"
 
@@ -365,11 +481,16 @@ placeholder="当前价格">
 
 </div>
 
-<div id="investmentList"></div>
+<div id="investmentList">
+
+</div>
 
 </section>
+<!-- ====================== -->
 
 <!-- AI CFO -->
+
+<!-- ====================== -->
 
 <section>
 
@@ -385,11 +506,19 @@ placeholder="当前价格">
 
 </button>
 
-<div id="cfoReport"></div>
+<div id="cfoReport">
+
+AI CFO 财富分析报告
+
+</div>
 
 </section>
 
-<!-- 税务 -->
+<!-- ====================== -->
+
+<!-- 税务中心 -->
+
+<!-- ====================== -->
 
 <section>
 
@@ -399,6 +528,12 @@ placeholder="当前价格">
 
 </h2>
 
+<button onclick="generateTaxReport()">
+
+生成税务报告
+
+</button>
+
 <div id="taxCenter">
 
 等待接入
@@ -407,7 +542,11 @@ placeholder="当前价格">
 
 </section>
 
-<!-- 退休 -->
+<!-- ====================== -->
+
+<!-- 退休中心 -->
+
+<!-- ====================== -->
 
 <section>
 
@@ -417,6 +556,12 @@ placeholder="当前价格">
 
 </h2>
 
+<button onclick="generateRetirementReport()">
+
+生成退休规划
+
+</button>
+
 <div id="retirementCenter">
 
 等待接入
@@ -425,7 +570,11 @@ placeholder="当前价格">
 
 </section>
 
-</main>
+<!-- ====================== -->
+
+<!-- 系统脚本 -->
+
+<!-- ====================== -->
 
 <script type="module" src="app.js"></script>
 
