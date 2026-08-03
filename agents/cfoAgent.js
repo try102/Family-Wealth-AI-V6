@@ -2,11 +2,11 @@
 
 Family Wealth AI OS
 
-V6.3.3 Upgrade Build001
+V6.3.8
 
 AI CFO Agent
 
-Asset Allocation Intelligence
+家庭财富智能分析中心
 
 */
 
@@ -16,7 +16,7 @@ const cfoAgent = {
 
     name:
 
-    "AI CFO Agent V6.3.3 Allocation Intelligence",
+    "AI CFO Agent V6.3.8 Stable",
 
     // ======================
 
@@ -26,7 +26,7 @@ const cfoAgent = {
 
     init(){
 
-        return "AI CFO V6.3.3 Ready";
+        return "AI CFO Ready";
 
     },
 
@@ -65,16 +65,6 @@ const cfoAgent = {
         const allocation =
 
         wealthEngine.assetAllocation(
-
-            assetsAgent,
-
-            investmentAgent
-
-        );
-
-        const allocationAnalysis =
-
-        wealthEngine.allocationAnalysis(
 
             assetsAgent,
 
@@ -128,187 +118,315 @@ const cfoAgent = {
 
             score,
 
-            allocation,
+            // V6.3.8 新增
 
-            allocationAnalysis,
+            scoreAnalysis:
+
+            this.scoreAnalysis(
+
+                wealth
+
+            ),
+
+            allocation,
 
             advice:
 
             this.generateAdvice(
 
-                wealth,
-
-                allocationAnalysis
+                wealth
 
             )
 
         };
 
     },
-// ======================
-
-// 财富评分
-
-// V6.3.7
-
-// ======================
-
-calculateScore(
-
-    wealth
-
-){
-
-    let score = 0;
 
     // ======================
 
-    // 资产基础
+    // 财富评分
+
+    // V6.3.7
 
     // ======================
 
-    if(
+    calculateScore(
+
+        wealth
+
+    ){
+
+        let score = 0;
+
+        // 资产基础
+
+        if(
+
+            wealth.totalAssets > 0
+
+        ){
+
+            score += 20;
+
+        }
+
+        if(
+
+            wealth.totalAssets > 100000
+
+        ){
+
+            score += 10;
+
+        }
+
+        // 收入能力
+
+        if(
+
+            wealth.totalIncome > 0
+
+        ){
+
+            score += 20;
+
+        }
+
+        // 投资能力
+
+        if(
+
+            wealth.investmentCount > 0
+
+        ){
+
+            score += 15;
+
+        }
+
+        // 负债健康
+
+        let debtRatio =
 
         wealth.totalAssets > 0
 
-    ){
+        ?
 
-        score += 20;
+        (
 
-    }
+            wealth.totalLiability
 
-    if(
+            /
 
-        wealth.totalAssets > 100000
+            wealth.totalAssets
 
-    ){
+            *
 
-        score += 10;
+            100
 
-    }
+        )
+
+        :
+
+        0;
+
+        if(
+
+            debtRatio < 30
+
+        ){
+
+            score += 20;
+
+        }
+
+        else if(
+
+            debtRatio < 50
+
+        ){
+
+            score += 10;
+
+        }
+
+        // 资产完整度
+
+        if(
+
+            wealth.assetCount >= 3
+
+        ){
+
+            score += 5;
+
+        }
+
+        return Math.min(
+
+            score,
+
+            100
+
+        );
+
+    },
 
     // ======================
 
-    // 收入能力
+    // 财富评分解释
+
+    // V6.3.8
 
     // ======================
 
-    if(
+    scoreAnalysis(
 
-        wealth.totalIncome > 0
-
-    ){
-
-        score += 20;
-
-    }
-
-    // ======================
-
-    // 投资能力
-
-    // ======================
-
-    if(
-
-        wealth.investmentCount > 0
-
-    ){
-
-        score += 15;
-
-    }
-
-    // ======================
-
-    // 负债健康
-
-    // ======================
-
-    let debtRatio =
-
-    wealth.totalAssets > 0
-
-    ?
-
-    (
-
-        wealth.totalLiability
-
-        /
-
-        wealth.totalAssets
-
-        *
-
-        100
-
-    )
-
-    :
-
-    0;
-
-    if(
-
-        debtRatio < 30
+        wealth
 
     ){
 
-        score += 20;
+        let result=[];
 
-    }
+        if(
 
-    else if(
+            wealth.totalAssets > 0
 
-        debtRatio < 50
+        ){
 
-    ){
+            result.push(
 
-        score += 10;
+                "✓ 家庭资产已建立"
 
-    }
+            );
+
+        }
+
+        if(
+
+            wealth.totalIncome > 0
+
+        ){
+
+            result.push(
+
+                "✓ 有稳定收入来源"
+
+            );
+
+        }
+
+        if(
+
+            wealth.investmentCount > 0
+
+        ){
+
+            result.push(
+
+                "✓ 已配置投资资产"
+
+            );
+
+        }
+
+        let debtRatio =
+
+        wealth.totalAssets > 0
+
+        ?
+
+        (
+
+            wealth.totalLiability
+
+            /
+
+            wealth.totalAssets
+
+            *
+
+            100
+
+        )
+
+        :
+
+        0;
+
+        if(
+
+            debtRatio < 30
+
+        ){
+
+            result.push(
+
+                "✓ 负债水平健康"
+
+            );
+
+        }
+
+        else if(
+
+            debtRatio > 50
+
+        ){
+
+            result.push(
+
+                "⚠ 负债比例较高"
+
+            );
+
+        }
+
+        if(
+
+            wealth.assetCount < 3
+
+        ){
+
+            result.push(
+
+                "⚠ 资产信息仍可进一步完善"
+
+            );
+
+        }
+
+        if(
+
+            result.length===0
+
+        ){
+
+            result.push(
+
+                "请完善家庭财富数据"
+
+            );
+
+        }
+
+        return result;
+
+    },
 
     // ======================
 
-    // 资产结构奖励
-
-    // ======================
-
-    if(
-
-        wealth.assetCount >= 3
-
-    ){
-
-        score += 5;
-
-    }
-
-    return Math.min(
-
-        score,
-
-        100
-
-    );
-
-},
-    // ======================
-
-    // AI建议 V6.3.3
+    // AI建议
 
     // ======================
 
     generateAdvice(
 
-        wealth,
-
-        allocationAnalysis
+        wealth
 
     ){
 
-        let advice = [];
+        let advice=[];
 
         if(
 
@@ -321,8 +439,6 @@ calculateScore(
                 "请完善家庭资产信息"
 
             );
-
-            return advice;
 
         }
 
@@ -396,85 +512,9 @@ calculateScore(
 
         }
 
-        // ======================
-
-        // V6.3.3 资产配置分析
-
-        // ======================
-
         if(
 
-            allocationAnalysis
-
-            &&
-
-            allocationAnalysis.ratio
-
-        ){
-
-            let ratio =
-
-            allocationAnalysis.ratio;
-
-            if(
-
-                ratio["房地产"]
-
-                >
-
-                60
-
-            ){
-
-                advice.push(
-
-                    "房地产资产占比较高，建议关注资产集中风险"
-
-                );
-
-            }
-
-            if(
-
-                ratio["现金"]
-
-                <
-
-                10
-
-            ){
-
-                advice.push(
-
-                    "现金比例偏低，建议保持一定流动资金"
-
-                );
-
-            }
-
-            if(
-
-                ratio["投资资产"]
-
-                >
-
-                0
-
-            ){
-
-                advice.push(
-
-                    "已建立投资资产配置，可持续优化长期收益结构"
-
-                );
-
-            }
-
-        }
-
-        if(
-
-            advice.length === 0
+            advice.length===0
 
         ){
 
@@ -492,7 +532,7 @@ calculateScore(
 
     // ======================
 
-    // 对外接口
+    // 对外报告接口
 
     // ======================
 
