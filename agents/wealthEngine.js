@@ -2,21 +2,21 @@
 
 Family Wealth AI OS
 
-V6.3.2 Upgrade Build001
+V6.3.5 Upgrade
 
 Wealth Engine
 
 家庭财富统一总账引擎
 
-Compatible with V6.2 Data
+兼容 V6.2 Data
 
 */
 
-const wealthEngine = {
+const wealthEngine={
 
     name:
 
-    "Wealth Engine V6.3.2 Upgrade",
+    "Wealth Engine V6.3.5 Stable",
 
     // ======================
 
@@ -140,7 +140,7 @@ const wealthEngine = {
 
         );
 
-        return {
+        return{
 
             totalAssets,
 
@@ -216,7 +216,7 @@ const wealthEngine = {
 
     // ======================
 
-    // 资产配置
+    // 资产配置金额
 
     // ======================
 
@@ -228,7 +228,7 @@ const wealthEngine = {
 
     ){
 
-        let result = {};
+        let result={};
 
         if(
 
@@ -258,7 +258,7 @@ const wealthEngine = {
 
                 }
 
-                result[category] +=
+                result[category]+=
 
                 Number(
 
@@ -302,7 +302,7 @@ const wealthEngine = {
 
                 }
 
-                result[category] +=
+                result[category]+=
 
                 Number(
 
@@ -324,9 +324,9 @@ const wealthEngine = {
 
     // ======================
 
-    // V6.3.2
+    // 财富结构分析
 
-    // 资产配置比例分析
+    // V6.3.5
 
     // ======================
 
@@ -356,23 +356,19 @@ const wealthEngine = {
 
             total +=
 
-            Number(
-
-                value || 0
-
-            );
+            Number(value || 0);
 
         });
 
-        let ratio = {};
+        let ratio={};
 
         Object.keys(allocation)
 
         .forEach(key=>{
 
-            ratio[key] =
+            ratio[key]=
 
-            total === 0
+            total===0
 
             ?
 
@@ -402,13 +398,65 @@ const wealthEngine = {
 
         });
 
-        return {
+        let risk=[];
 
-            total,
+        if(
+
+            ratio["房产"]
+
+            >
+
+            70
+
+        ){
+
+            risk.push(
+
+            "房产占比较高，资产流动性需要关注"
+
+            );
+
+        }
+
+        if(
+
+            ratio["现金"]
+
+            <
+
+            10
+
+        ){
+
+            risk.push(
+
+            "现金比例较低，需要保持备用资金"
+
+            );
+
+        }
+
+        if(
+
+            risk.length===0
+
+        ){
+
+            risk.push(
+
+            "当前资产结构较为均衡"
+
+            );
+
+        }
+
+        return{
 
             allocation,
 
-            ratio
+            ratio,
+
+            risk
 
         };
 
@@ -422,9 +470,7 @@ const wealthEngine = {
 
     ownerAllocation(
 
-        assetsAgent,
-
-        investmentAgent
+        assetsAgent
 
     ){
 
@@ -486,9 +532,7 @@ const wealthEngine = {
 
     countryAllocation(
 
-        assetsAgent,
-
-        investmentAgent
+        assetsAgent
 
     ){
 
@@ -560,7 +604,7 @@ const wealthEngine = {
 
     ){
 
-        return {
+        return{
 
             summary:
 
@@ -600,9 +644,7 @@ const wealthEngine = {
 
             this.ownerAllocation(
 
-                assetsAgent,
-
-                investmentAgent
+                assetsAgent
 
             ),
 
@@ -610,9 +652,7 @@ const wealthEngine = {
 
             this.countryAllocation(
 
-                assetsAgent,
-
-                investmentAgent
+                assetsAgent
 
             )
 
