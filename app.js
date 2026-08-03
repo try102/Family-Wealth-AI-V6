@@ -245,6 +245,14 @@ function updateDashboard(){
 
 // ======================
 
+// ======================
+
+// 资产配置显示
+
+// V6.3.6
+
+// ======================
+
 function updateAllocationDisplay(){
 
     let box =
@@ -275,10 +283,6 @@ function updateAllocationDisplay(){
 
         !data
 
-        ||
-
-        !data.ratio
-
     ){
 
         box.innerHTML =
@@ -289,7 +293,9 @@ function updateAllocationDisplay(){
 
     }
 
-    let html = "";
+    let html =
+
+    "<h4>资产比例</h4>";
 
     Object.keys(data.ratio)
 
@@ -308,6 +314,62 @@ function updateAllocationDisplay(){
         `;
 
     });
+
+    html +=
+
+    `
+
+    <br>
+
+    <h4>
+
+    🤖 AI风险提示
+
+    </h4>
+
+    `;
+
+    if(
+
+        data.risk
+
+        &&
+
+        data.risk.length
+
+    ){
+
+        html += "<ul>";
+
+        data.risk
+
+        .forEach(item=>{
+
+            html +=
+
+            `
+
+            <li>
+
+            ${item}
+
+            </li>
+
+            `;
+
+        });
+
+        html += "</ul>";
+
+    }
+
+    else{
+
+        html +=
+
+        "暂无风险提示";
+
+    }
 
     box.innerHTML = html;
 
