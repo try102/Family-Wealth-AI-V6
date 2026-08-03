@@ -1260,7 +1260,9 @@ function deleteLiability(id){
 }
 // ======================
 
-// AI CFO
+// AI CFO 报告显示
+
+// V6.3.9
 
 // ======================
 
@@ -1294,7 +1296,53 @@ function generateCFOReport(){
 
     }
 
-    box.innerHTML = `
+    let scoreHTML = "";
+
+    if(
+
+        report.scoreAnalysis
+
+        &&
+
+        report.scoreAnalysis.length
+
+    ){
+
+        scoreHTML =
+
+        `
+
+        <h4>
+
+        📊 财富评分分析
+
+        </h4>
+
+        <ul>
+
+        ${
+
+            report.scoreAnalysis
+
+            .map(
+
+                x=>`<li>${x}</li>`
+
+            )
+
+            .join("")
+
+        }
+
+        </ul>
+
+        `;
+
+    }
+
+    box.innerHTML =
+
+    `
 
     <hr>
 
@@ -1358,9 +1406,15 @@ function generateCFOReport(){
 
     ${report.wealthScore || 0}
 
-    <br><br>
+    <br>
 
-    AI建议：
+    ${scoreHTML}
+
+    <h4>
+
+    🤖 AI建议
+
+    </h4>
 
     <ul>
 
@@ -1391,7 +1445,6 @@ function generateCFOReport(){
     `;
 
 }
-
 // ======================
 
 // 税务中心
