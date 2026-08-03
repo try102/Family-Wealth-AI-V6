@@ -2,21 +2,21 @@
 
 Family Wealth AI OS
 
-V6.1 Stable
+V6.3.2 Upgrade Build001
 
 Wealth Engine
 
 家庭财富统一总账引擎
 
-兼容 V5.4 / V6.0
+Compatible with V6.2 Data
 
 */
 
-const wealthEngine={
+const wealthEngine = {
 
     name:
 
-    "Wealth Engine V6.1 Stable",
+    "Wealth Engine V6.3.2 Upgrade",
 
     // ======================
 
@@ -140,7 +140,7 @@ const wealthEngine={
 
         );
 
-        return{
+        return {
 
             totalAssets,
 
@@ -228,7 +228,7 @@ const wealthEngine={
 
     ){
 
-        let result={};
+        let result = {};
 
         if(
 
@@ -258,7 +258,7 @@ const wealthEngine={
 
                 }
 
-                result[category]+=
+                result[category] +=
 
                 Number(
 
@@ -294,7 +294,7 @@ const wealthEngine={
 
                 ||
 
-                "投资";
+                "投资资产";
 
                 if(!result[category]){
 
@@ -302,7 +302,7 @@ const wealthEngine={
 
                 }
 
-                result[category]+=
+                result[category] +=
 
                 Number(
 
@@ -319,6 +319,98 @@ const wealthEngine={
         }
 
         return result;
+
+    },
+
+    // ======================
+
+    // V6.3.2
+
+    // 资产配置比例分析
+
+    // ======================
+
+    allocationAnalysis(
+
+        assetsAgent,
+
+        investmentAgent
+
+    ){
+
+        let allocation =
+
+        this.assetAllocation(
+
+            assetsAgent,
+
+            investmentAgent
+
+        );
+
+        let total = 0;
+
+        Object.values(allocation)
+
+        .forEach(value=>{
+
+            total +=
+
+            Number(
+
+                value || 0
+
+            );
+
+        });
+
+        let ratio = {};
+
+        Object.keys(allocation)
+
+        .forEach(key=>{
+
+            ratio[key] =
+
+            total === 0
+
+            ?
+
+            0
+
+            :
+
+            Number(
+
+                (
+
+                allocation[key]
+
+                /
+
+                total
+
+                *
+
+                100
+
+                )
+
+                .toFixed(2)
+
+            );
+
+        });
+
+        return {
+
+            total,
+
+            allocation,
+
+            ratio
+
+        };
 
     },
 
@@ -468,7 +560,7 @@ const wealthEngine={
 
     ){
 
-        return{
+        return {
 
             summary:
 
@@ -487,6 +579,16 @@ const wealthEngine={
             allocation:
 
             this.assetAllocation(
+
+                assetsAgent,
+
+                investmentAgent
+
+            ),
+
+            allocationAnalysis:
+
+            this.allocationAnalysis(
 
                 assetsAgent,
 
