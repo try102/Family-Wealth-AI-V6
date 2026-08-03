@@ -145,121 +145,155 @@ const cfoAgent = {
         };
 
     },
+// ======================
+
+// 财富评分
+
+// V6.3.7
+
+// ======================
+
+calculateScore(
+
+    wealth
+
+){
+
+    let score = 0;
 
     // ======================
 
-    // 财富评分
+    // 资产基础
 
     // ======================
 
-    calculateScore(wealth){
-
-        let score = 0;
-
-        if(
-
-            wealth.totalAssets > 0
-
-        ){
-
-            score += 20;
-
-        }
-
-        if(
-
-            wealth.totalAssets > 100000
-
-        ){
-
-            score += 10;
-
-        }
-
-        if(
-
-            wealth.totalIncome > 0
-
-        ){
-
-            score += 20;
-
-        }
-
-        if(
-
-            wealth.investmentCount > 0
-
-        ){
-
-            score += 15;
-
-        }
-
-        let debtRatio =
+    if(
 
         wealth.totalAssets > 0
 
-        ?
+    ){
 
-        (
+        score += 20;
 
-            wealth.totalLiability
+    }
 
-            /
+    if(
 
-            wealth.totalAssets
+        wealth.totalAssets > 100000
 
-            *
+    ){
 
-            100
+        score += 10;
 
-        )
+    }
 
-        :
+    // ======================
 
-        0;
+    // 收入能力
 
-        if(
+    // ======================
 
-            debtRatio < 30
+    if(
 
-        ){
+        wealth.totalIncome > 0
 
-            score += 25;
+    ){
 
-        }
+        score += 20;
 
-        else if(
+    }
 
-            debtRatio < 50
+    // ======================
 
-        ){
+    // 投资能力
 
-            score += 15;
+    // ======================
 
-        }
+    if(
 
-        if(
+        wealth.investmentCount > 0
 
-            wealth.assetCount >= 3
+    ){
 
-        ){
+        score += 15;
 
-            score += 10;
+    }
 
-        }
+    // ======================
 
-        return Math.min(
+    // 负债健康
 
-            score,
+    // ======================
 
-            100
+    let debtRatio =
 
-        );
+    wealth.totalAssets > 0
 
-    },
+    ?
 
+    (
+
+        wealth.totalLiability
+
+        /
+
+        wealth.totalAssets
+
+        *
+
+        100
+
+    )
+
+    :
+
+    0;
+
+    if(
+
+        debtRatio < 30
+
+    ){
+
+        score += 20;
+
+    }
+
+    else if(
+
+        debtRatio < 50
+
+    ){
+
+        score += 10;
+
+    }
+
+    // ======================
+
+    // 资产结构奖励
+
+    // ======================
+
+    if(
+
+        wealth.assetCount >= 3
+
+    ){
+
+        score += 5;
+
+    }
+
+    return Math.min(
+
+        score,
+
+        100
+
+    );
+
+},
     // ======================
 
     // AI建议 V6.3.3
