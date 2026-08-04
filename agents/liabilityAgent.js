@@ -1,8 +1,10 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
-V6.2 Stable
+V7.0 Final Build
 
 Liability Agent
 
@@ -10,11 +12,13 @@ Liability Agent
 
 */
 
+import familyDatabase from "../database/familyDatabase.js";
+
 const liabilityAgent = {
 
     name:
 
-    "Liability Agent V6.2 Stable",
+    "Liability Agent V7.0 Final",
 
     // ======================
 
@@ -24,25 +28,7 @@ const liabilityAgent = {
 
     init(){
 
-        if(
-
-            !localStorage.getItem(
-
-                "wealth_liabilities"
-
-            )
-
-        ){
-
-            localStorage.setItem(
-
-                "wealth_liabilities",
-
-                JSON.stringify([])
-
-            );
-
-        }
+        familyDatabase.init();
 
         return "Liability Ready";
 
@@ -56,35 +42,9 @@ const liabilityAgent = {
 
     getData(){
 
-        return JSON.parse(
+        return familyDatabase.getModule(
 
-            localStorage.getItem(
-
-                "wealth_liabilities"
-
-            )
-
-            ||
-
-            "[]"
-
-        );
-
-    },
-
-    // ======================
-
-    // 保存
-
-    // ======================
-
-    save(data){
-
-        localStorage.setItem(
-
-            "wealth_liabilities",
-
-            JSON.stringify(data)
+            "liability"
 
         );
 
@@ -97,10 +57,6 @@ const liabilityAgent = {
     // ======================
 
     add(data){
-
-        let list =
-
-        this.getData();
 
         let item={
 
@@ -123,8 +79,6 @@ const liabilityAgent = {
                 data.principal || 0
 
             ),
-
-            // 6 = 6%
 
             interest:
 
@@ -152,11 +106,13 @@ const liabilityAgent = {
 
         };
 
-        list.push(item);
+        return familyDatabase.add(
 
-        this.save(list);
+            "liability",
 
-        return item;
+            item
+
+        );
 
     },
 
@@ -169,74 +125,6 @@ const liabilityAgent = {
     view(){
 
         return this.getData();
-
-    },
-
-    // ======================
-
-    // 编辑
-
-    // ======================
-
-    edit(id,newData){
-
-        let list =
-
-        this.getData();
-
-        let index =
-
-        list.findIndex(
-
-            item=>
-
-            item.id===id
-
-        );
-
-        if(index!==-1){
-
-            list[index]={
-
-                ...list[index],
-
-                ...newData
-
-            };
-
-        }
-
-        this.save(list);
-
-        return list;
-
-    },
-
-    // ======================
-
-    // 删除
-
-    // ======================
-
-    delete(id){
-
-        let list =
-
-        this.getData();
-
-        list =
-
-        list.filter(
-
-            item=>
-
-            item.id!==id
-
-        );
-
-        this.save(list);
-
-        return "deleted";
 
     },
 
@@ -270,13 +158,61 @@ const liabilityAgent = {
 
             annualInterest:
 
-            principal *
+            principal
 
-            interest /
+            *
+
+            interest
+
+            /
 
             100
 
         };
+
+    },
+
+    // ======================
+
+    // 编辑
+
+    // ======================
+
+    edit(
+
+        id,
+
+        data
+
+    ){
+
+        return familyDatabase.update(
+
+            "liability",
+
+            id,
+
+            data
+
+        );
+
+    },
+
+    // ======================
+
+    // 删除
+
+    // ======================
+
+    delete(id){
+
+        return familyDatabase.remove(
+
+            "liability",
+
+            id
+
+        );
 
     },
 
@@ -292,9 +228,9 @@ const liabilityAgent = {
 
         this.getData();
 
-        let totalLiability = 0;
+        let totalLiability=0;
 
-        let annualInterest = 0;
+        let annualInterest=0;
 
         list.forEach(item=>{
 
