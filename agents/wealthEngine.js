@@ -4,21 +4,19 @@
 
 Family Wealth AI OS
 
-V6.5.0 Upgrade Build
+V7.0 Final Build
 
 Wealth Engine
 
 家庭财富统一总账引擎
 
-Compatible with V6.4.2
-
 */
 
-const wealthEngine={
+const wealthEngine = {
 
     name:
 
-    "Wealth Engine V6.5.0 Stable",
+    "Wealth Engine V7.0 Final",
 
     // ======================
 
@@ -28,13 +26,15 @@ const wealthEngine={
 
     getSummary(agent){
 
-        if(!agent){
+        if(
 
-            return {};
+            agent
 
-        }
+            &&
 
-        if(agent.summary){
+            agent.summary
+
+        ){
 
             return agent.summary();
 
@@ -88,57 +88,33 @@ const wealthEngine={
 
         let liability =
 
-        liabilityAgent
+        this.getSummary(
 
-        &&
-
-        liabilityAgent.summary
-
-        ?
-
-        liabilityAgent.summary()
-
-        :
-
-        {};
-
-        let normalAssets =
-
-        Number(
-
-            assets.totalValue || 0
-
-        );
-
-        let investmentAssets =
-
-        Number(
-
-            investment.totalValue || 0
+            liabilityAgent
 
         );
 
         let totalAssets =
 
-        normalAssets
+            Number(
 
-        +
+                assets.totalValue || 0
 
-        investmentAssets;
+            )
+
+            +
+
+            Number(
+
+                investment.totalValue || 0
+
+            );
 
         let totalLiability =
 
         Number(
 
-            liability.totalLiability
-
-            ||
-
-            liability.totalValue
-
-            ||
-
-            0
+            liability.totalLiability || 0
 
         );
 
@@ -156,19 +132,27 @@ const wealthEngine={
 
             totalLiability,
 
-            normalAssets,
+            normalAssets:
 
-            investmentAssets,
+            Number(
+
+                assets.totalValue || 0
+
+            ),
+
+            investmentAssets:
+
+            Number(
+
+                investment.totalValue || 0
+
+            ),
 
             totalIncome:
 
             Number(
 
-                income.totalIncome
-
-                ||
-
-                0
+                income.totalIncome || 0
 
             ),
 
@@ -176,11 +160,7 @@ const wealthEngine={
 
             Number(
 
-                investment.profit
-
-                ||
-
-                0
+                investment.profit || 0
 
             ),
 
@@ -192,9 +172,9 @@ const wealthEngine={
 
             investment.count || 0,
 
-            incomeCount:
+            liabilityCount:
 
-            income.count || 0
+            liability.count || 0
 
         };
 
@@ -202,7 +182,7 @@ const wealthEngine={
 
     // ======================
 
-    // 资产配置金额
+    // 资产分类
 
     // ======================
 
@@ -232,11 +212,7 @@ const wealthEngine={
 
                 let category =
 
-                item.category
-
-                ||
-
-                "其他";
+                item.category || "其他";
 
                 if(!result[category]){
 
@@ -272,11 +248,7 @@ const wealthEngine={
 
                 let category =
 
-                item.type
-
-                ||
-
-                "投资资产";
+                item.type || "股票";
 
                 if(!result[category]){
 
@@ -302,7 +274,7 @@ const wealthEngine={
 
     // ======================
 
-    // 财富结构分析
+    // 配置比例
 
     // ======================
 
@@ -328,11 +300,9 @@ const wealthEngine={
 
         Object.values(allocation)
 
-        .forEach(value=>{
+        .forEach(v=>{
 
-            total +=
-
-            Number(value || 0);
+            total += Number(v || 0);
 
         });
 
@@ -388,7 +358,7 @@ const wealthEngine={
 
             risk.push(
 
-            "房产占比较高，资产流动性需要关注"
+            "房地产集中度较高，需要提高资产流动性"
 
             );
 
@@ -406,7 +376,7 @@ const wealthEngine={
 
             risk.push(
 
-            "现金比例较低，需要保持备用资金"
+            "现金比例偏低，建议保持备用资金"
 
             );
 
@@ -420,7 +390,7 @@ const wealthEngine={
 
             risk.push(
 
-            "当前资产结构较为均衡"
+            "当前资产结构较均衡"
 
             );
 
@@ -440,9 +410,7 @@ const wealthEngine={
 
     // ======================
 
-    // V6.5 新增
-
-    // 财务健康分析
+    // 财务健康
 
     // ======================
 
@@ -482,21 +450,23 @@ const wealthEngine={
 
         );
 
-        let totalAssets =
+        let total =
 
         wealth.totalAssets || 0;
 
-        let debtRatio =
+        return{
 
-        totalAssets===0
+            debtRatio:
 
-        ?
+            total===0
 
-        0
+            ?
 
-        :
+            0
 
-        Number(
+            :
+
+            Number(
 
             (
 
@@ -504,7 +474,7 @@ const wealthEngine={
 
             /
 
-            totalAssets
+            total
 
             *
 
@@ -514,43 +484,11 @@ const wealthEngine={
 
             .toFixed(2)
 
-        );
-
-        let realEstate =
-
-        allocation["房产"]
-
-        ||
-
-        0;
-
-        let cash =
-
-        allocation["现金"]
-
-        ||
-
-        0;
-
-        let investment =
-
-        allocation["股票"]
-
-        ||
-
-        allocation["投资资产"]
-
-        ||
-
-        0;
-
-        return{
-
-            debtRatio,
+            ),
 
             liquidityRatio:
 
-            totalAssets===0
+            total===0
 
             ?
 
@@ -560,27 +498,27 @@ const wealthEngine={
 
             Number(
 
-                (
+            (
 
-                cash
+            (allocation["现金"]||0)
 
-                /
+            /
 
-                totalAssets
+            total
 
-                *
+            *
 
-                100
+            100
 
-                )
+            )
 
-                .toFixed(2)
+            .toFixed(2)
 
             ),
 
             investmentRatio:
 
-            totalAssets===0
+            total===0
 
             ?
 
@@ -590,27 +528,27 @@ const wealthEngine={
 
             Number(
 
-                (
+            (
 
-                investment
+            (allocation["股票"]||0)
 
-                /
+            /
 
-                totalAssets
+            total
 
-                *
+            *
 
-                100
+            100
 
-                )
+            )
 
-                .toFixed(2)
+            .toFixed(2)
 
             ),
 
             realEstateRatio:
 
-            totalAssets===0
+            total===0
 
             ?
 
@@ -620,97 +558,21 @@ const wealthEngine={
 
             Number(
 
-                (
+            (
 
-                realEstate
+            (allocation["房产"]||0)
 
-                /
+            /
 
-                totalAssets
+            total
 
-                *
+            *
 
-                100
+            100
 
-                )
+            )
 
-                .toFixed(2)
-
-            ),
-
-            annualCashFlow:
-
-            wealth.totalIncome || 0
-
-        };
-
-    },
-
-    // ======================
-
-    // 完整报告
-
-    // ======================
-
-    report(
-
-        assetsAgent,
-
-        investmentAgent,
-
-        incomeAgent,
-
-        liabilityAgent
-
-    ){
-
-        return{
-
-            summary:
-
-            this.summary(
-
-                assetsAgent,
-
-                investmentAgent,
-
-                incomeAgent,
-
-                liabilityAgent
-
-            ),
-
-            allocation:
-
-            this.assetAllocation(
-
-                assetsAgent,
-
-                investmentAgent
-
-            ),
-
-            allocationAnalysis:
-
-            this.allocationAnalysis(
-
-                assetsAgent,
-
-                investmentAgent
-
-            ),
-
-            financialHealth:
-
-            this.financialHealth(
-
-                assetsAgent,
-
-                investmentAgent,
-
-                incomeAgent,
-
-                liabilityAgent
+            .toFixed(2)
 
             )
 
