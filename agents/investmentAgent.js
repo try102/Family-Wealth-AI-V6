@@ -1,22 +1,24 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
-V6.2 Stable Upgrade
+V7.0 Final Build
 
 Investment Agent
 
-投资管理升级版
-
-兼容 V5.4.1 / V6.1
+家庭投资管理核心模块
 
 */
+
+import familyDatabase from "../database/familyDatabase.js";
 
 const investmentAgent = {
 
     name:
 
-    "Investment Agent V6.2 Upgrade",
+    "Investment Agent V7.0 Final",
 
     // ======================
 
@@ -26,25 +28,7 @@ const investmentAgent = {
 
     init(){
 
-        if(
-
-            !localStorage.getItem(
-
-                "wealth_investments"
-
-            )
-
-        ){
-
-            localStorage.setItem(
-
-                "wealth_investments",
-
-                JSON.stringify([])
-
-            );
-
-        }
+        familyDatabase.init();
 
         return "Investment Ready";
 
@@ -58,35 +42,9 @@ const investmentAgent = {
 
     getData(){
 
-        return JSON.parse(
+        return familyDatabase.getModule(
 
-            localStorage.getItem(
-
-                "wealth_investments"
-
-            )
-
-            ||
-
-            "[]"
-
-        );
-
-    },
-
-    // ======================
-
-    // 保存
-
-    // ======================
-
-    save(data){
-
-        localStorage.setItem(
-
-            "wealth_investments",
-
-            JSON.stringify(data)
+            "investment"
 
         );
 
@@ -99,10 +57,6 @@ const investmentAgent = {
     // ======================
 
     add(data){
-
-        let list =
-
-        this.getData();
 
         let item={
 
@@ -176,11 +130,13 @@ const investmentAgent = {
 
         };
 
-        list.push(item);
+        return familyDatabase.add(
 
-        this.save(list);
+            "investment",
 
-        return item;
+            item
+
+        );
 
     },
 
@@ -238,7 +194,7 @@ const investmentAgent = {
 
     // ======================
 
-    // 当前市值
+    // 市值
 
     // ======================
 
@@ -306,7 +262,7 @@ const investmentAgent = {
 
     // ======================
 
-    // 单项分析
+    // 分析
 
     // ======================
 
@@ -388,7 +344,7 @@ const investmentAgent = {
 
     // ======================
 
-    // 持仓
+    // 投资组合
 
     // ======================
 
@@ -412,37 +368,23 @@ const investmentAgent = {
 
     // ======================
 
-    edit(id,newData){
+    edit(
 
-        let list =
+        id,
 
-        this.getData();
+        data
 
-        let index =
+    ){
 
-        list.findIndex(
+        return familyDatabase.update(
 
-            x=>
+            "investment",
 
-            x.id===id
+            id,
+
+            data
 
         );
-
-        if(index!==-1){
-
-            list[index]={
-
-                ...list[index],
-
-                ...newData
-
-            };
-
-        }
-
-        this.save(list);
-
-        return list;
 
     },
 
@@ -454,23 +396,13 @@ const investmentAgent = {
 
     delete(id){
 
-        let list =
+        return familyDatabase.remove(
 
-        this.getData();
+            "investment",
 
-        list =
-
-        list.filter(
-
-            x=>
-
-            x.id!==id
+            id
 
         );
-
-        this.save(list);
-
-        return "deleted";
 
     },
 
@@ -555,30 +487,6 @@ const investmentAgent = {
             :
 
             0
-
-        };
-
-    },
-
-    // ======================
-
-    // 风险接口
-
-    // ======================
-
-    riskSummary(){
-
-        return {
-
-            level:
-
-            "中",
-
-            advice:[
-
-                "关注投资集中度"
-
-            ]
 
         };
 
