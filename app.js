@@ -1,10 +1,14 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
-V6.4.2 Stable Recovery Build
+V6.5.0 Upgrade Build
 
 Main Application
+
+Financial Health Upgrade
 
 */
 
@@ -95,6 +99,8 @@ function refreshAll(){
     updateDashboard();
 
     updateAllocationDisplay();
+
+    updateFinancialHealthDisplay();
 
     updateAssetDisplay();
 
@@ -208,15 +214,21 @@ function updateDashboard(){
 
         if(el){
 
-            if(id==="wealthScore"){
+            if(
 
-                el.innerHTML=data[id];
+                id==="wealthScore"
+
+            ){
+
+                el.innerHTML =
+
+                data[id];
 
             }
 
             else{
 
-                el.innerHTML=
+                el.innerHTML =
 
                 "¥"+
 
@@ -239,8 +251,6 @@ function updateDashboard(){
 // ======================
 
 // 资产配置分析
-
-// V6.4.2 修复
 
 // ======================
 
@@ -290,7 +300,11 @@ function updateAllocationDisplay(){
 
     let html="";
 
-    Object.keys(analysis.ratio)
+    Object.keys(
+
+        analysis.ratio
+
+    )
 
     .forEach(key=>{
 
@@ -328,16 +342,115 @@ function updateAllocationDisplay(){
 
             html +=
 
-            "• "+item+"<br>";
+            "• "
+
+            +
+
+            item
+
+            +
+
+            "<br>";
 
         });
 
     }
 
-    box.innerHTML=html;
+    box.innerHTML = html;
 
 }
 
+// ======================
+
+// V6.5 新增
+
+// 财务健康指标
+
+// ======================
+
+function updateFinancialHealthDisplay(){
+
+    let box =
+
+    document.getElementById(
+
+        "financialHealth"
+
+    );
+
+    if(!box){
+
+        return;
+
+    }
+
+    let data =
+
+    wealthEngine.financialHealth(
+
+        assetsAgent,
+
+        investmentAgent,
+
+        incomeAgent,
+
+        liabilityAgent
+
+    );
+
+    if(!data){
+
+        box.innerHTML=
+
+        "暂无数据";
+
+        return;
+
+    }
+
+    box.innerHTML =
+
+    `
+
+    负债率：
+
+    ${data.debtRatio}%
+
+    <br>
+
+    流动资产比例：
+
+    ${data.liquidityRatio}%
+
+    <br>
+
+    投资资产比例：
+
+    ${data.investmentRatio}%
+
+    <br>
+
+    房地产集中度：
+
+    ${data.realEstateRatio}%
+
+    <br>
+
+    年度现金流：
+
+    ¥${Number(
+
+        data.annualCashFlow || 0
+
+    ).toLocaleString(
+
+        "zh-CN"
+
+    )}
+
+    `;
+
+}
 // ======================
 
 // 资产中心
@@ -348,23 +461,41 @@ function addNewAsset(){
 
     let asset={
 
-        name:getValue("assetName"),
+        name:
 
-        category:getValue("assetCategory"),
+        getValue("assetName"),
 
-        type:getValue("assetType"),
+        category:
 
-        owner:getValue("assetOwner"),
+        getValue("assetCategory"),
 
-        country:getValue("assetCountry"),
+        type:
 
-        currency:getValue("assetCurrency"),
+        getValue("assetType"),
 
-        institution:getValue("assetInstitution"),
+        owner:
 
-        account:getValue("assetAccount"),
+        getValue("assetOwner"),
 
-        value:Number(
+        country:
+
+        getValue("assetCountry"),
+
+        currency:
+
+        getValue("assetCurrency"),
+
+        institution:
+
+        getValue("assetInstitution"),
+
+        account:
+
+        getValue("assetAccount"),
+
+        value:
+
+        Number(
 
             getValue("assetValue")
 
@@ -418,7 +549,11 @@ function updateAssetDisplay(){
 
         <div class="item">
 
-        <h3>${item.name}</h3>
+        <h3>
+
+        ${item.name}
+
+        </h3>
 
         类别：
 
@@ -426,13 +561,23 @@ function updateAssetDisplay(){
 
         <br>
 
+        类型：
+
+        ${item.type || ""}
+
+        <br>
+
         价值：
 
         ¥${Number(
 
-            item.value||0
+            item.value || 0
 
-        ).toLocaleString("zh-CN")}
+        ).toLocaleString(
+
+            "zh-CN"
+
+        )}
 
         <br><br>
 
@@ -455,11 +600,6 @@ function updateAssetDisplay(){
     });
 
 }
-// ======================
-
-// 资产编辑删除
-
-// ======================
 
 function editAsset(id){
 
@@ -615,9 +755,13 @@ function updateIncomeDisplay(){
 
         ¥${Number(
 
-            item.amount||0
+            item.amount || 0
 
-        ).toLocaleString("zh-CN")}
+        ).toLocaleString(
+
+            "zh-CN"
+
+        )}
 
         <br>
 
@@ -683,7 +827,9 @@ function editIncome(id){
 
             {
 
-                amount:Number(amount)
+                amount:
+
+                Number(amount)
 
             }
 
@@ -706,7 +852,6 @@ function deleteIncome(id){
     }
 
 }
-
 // ======================
 
 // 投资中心
@@ -845,9 +990,13 @@ function updateInvestmentDisplay(){
 
         ¥${Number(
 
-            item.buyPrice||0
+            item.buyPrice || 0
 
-        ).toLocaleString("zh-CN")}
+        ).toLocaleString(
+
+            "zh-CN"
+
+        )}
 
         <br>
 
@@ -861,9 +1010,13 @@ function updateInvestmentDisplay(){
 
         ¥${Number(
 
-            item.currentPrice||0
+            item.currentPrice || 0
 
-        ).toLocaleString("zh-CN")}
+        ).toLocaleString(
+
+            "zh-CN"
+
+        )}
 
         <br>
 
@@ -871,9 +1024,13 @@ function updateInvestmentDisplay(){
 
         ¥${Number(
 
-            item.marketValue||0
+            item.marketValue || 0
 
-        ).toLocaleString("zh-CN")}
+        ).toLocaleString(
+
+            "zh-CN"
+
+        )}
 
         <br>
 
@@ -881,9 +1038,13 @@ function updateInvestmentDisplay(){
 
         ¥${Number(
 
-            item.totalProfit||0
+            item.totalProfit || 0
 
-        ).toLocaleString("zh-CN")}
+        ).toLocaleString(
+
+            "zh-CN"
+
+        )}
 
         <br><br>
 
@@ -968,6 +1129,7 @@ function deleteInvestment(id){
     }
 
 }
+
 // ======================
 
 // 负债中心
@@ -1076,9 +1238,13 @@ function updateLiabilityDisplay(){
 
         ¥${Number(
 
-            item.principal||0
+            item.principal || 0
 
-        ).toLocaleString("zh-CN")}
+        ).toLocaleString(
+
+            "zh-CN"
+
+        )}
 
         <br>
 
@@ -1175,7 +1341,6 @@ function deleteLiability(id){
     }
 
 }
-
 // ======================
 
 // AI CFO
@@ -1226,9 +1391,13 @@ function generateCFOReport(){
 
     ¥${Number(
 
-        report.totalAssets||0
+        report.totalAssets || 0
 
-    ).toLocaleString("zh-CN")}
+    ).toLocaleString(
+
+        "zh-CN"
+
+    )}
 
     <br>
 
@@ -1236,9 +1405,13 @@ function generateCFOReport(){
 
     ¥${Number(
 
-        report.totalLiability||0
+        report.totalLiability || 0
 
-    ).toLocaleString("zh-CN")}
+    ).toLocaleString(
+
+        "zh-CN"
+
+    )}
 
     <br>
 
@@ -1246,9 +1419,41 @@ function generateCFOReport(){
 
     ¥${Number(
 
-        report.netWorth||0
+        report.netWorth || 0
 
-    ).toLocaleString("zh-CN")}
+    ).toLocaleString(
+
+        "zh-CN"
+
+    )}
+
+    <br>
+
+    年度收入：
+
+    ¥${Number(
+
+        report.totalIncome || 0
+
+    ).toLocaleString(
+
+        "zh-CN"
+
+    )}
+
+    <br>
+
+    投资收益：
+
+    ¥${Number(
+
+        report.investmentProfit || 0
+
+    ).toLocaleString(
+
+        "zh-CN"
+
+    )}
 
     <br>
 
@@ -1312,7 +1517,7 @@ function generateTaxReport(){
 
         box.innerHTML =
 
-        "税务中心 V6.4 已接入";
+        "税务中心 V6.5 已接入";
 
     }
 
@@ -1338,7 +1543,7 @@ function generateRetirementReport(){
 
         box.innerHTML =
 
-        "退休规划中心 V6.4 已接入";
+        "退休规划中心 V6.5 已接入";
 
     }
 
