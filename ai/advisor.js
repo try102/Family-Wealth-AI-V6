@@ -1,22 +1,24 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
 V7.0 Final Build
 
 AI Advisor
 
-家庭财富智能顾问接口
+家庭财富智能顾问
 
 */
 
-import familyDatabase from "../database/familyDatabase.js";
+import wealthEngine from "../agents/wealthEngine.js";
 
 const advisor = {
 
     name:
 
-    "AI Advisor V7.0 Final",
+    "AI Wealth Advisor V7.0 Final",
 
     // ======================
 
@@ -26,21 +28,7 @@ const advisor = {
 
     init(){
 
-        familyDatabase.init();
-
-        return "AI Advisor Ready";
-
-    },
-
-    // ======================
-
-    // 获取财富数据
-
-    // ======================
-
-    getWealthData(){
-
-        return familyDatabase.get();
+        return "Advisor Ready";
 
     },
 
@@ -50,31 +38,95 @@ const advisor = {
 
     // ======================
 
-    diagnose(){
+    analyze(
 
-        let db =
+        assetsAgent,
 
-        this.getWealthData();
+        investmentAgent,
 
-        let result=[];
+        incomeAgent,
 
-        let assets =
+        liabilityAgent
 
-        db.assets || [];
+    ){
 
-        let liabilities =
+        let wealth =
 
-        db.liabilities || [];
+        wealthEngine.summary(
+
+            assetsAgent,
+
+            investmentAgent,
+
+            incomeAgent,
+
+            liabilityAgent
+
+        );
+
+        let health =
+
+        wealthEngine.financialHealth(
+
+            assetsAgent,
+
+            investmentAgent,
+
+            incomeAgent,
+
+            liabilityAgent
+
+        );
+
+        let result={
+
+            title:
+
+            "家庭财富AI诊断报告",
+
+            summary:{
+
+                netWorth:
+
+                wealth.netWorth || 0,
+
+                totalAssets:
+
+                wealth.totalAssets || 0,
+
+                totalLiability:
+
+                wealth.totalLiability || 0,
+
+                annualIncome:
+
+                wealth.totalIncome || 0
+
+            },
+
+            strengths:[],
+
+            risks:[],
+
+            advice:[]
+
+        };
+
+        // ======================
+
+        // 优势分析
+
+        // ======================
 
         if(
 
-            assets.length === 0
+            wealth.netWorth > 0
 
         ){
 
-            result.push(
+            result.strengths.push(
 
-                "请完善家庭资产信息"
+                "家庭净资产为正，财富基础良好"
 
             );
 
@@ -82,13 +134,13 @@ const advisor = {
 
         if(
 
-            liabilities.length > 0
+            wealth.totalIncome > 0
 
         ){
 
-            result.push(
+            result.strengths.push(
 
-                "请关注家庭负债水平"
+                "存在稳定收入来源"
 
             );
 
@@ -96,13 +148,39 @@ const advisor = {
 
         if(
 
-            assets.length >= 3
+            wealth.investmentProfit > 0
 
         ){
 
-            result.push(
+            result.strengths.push(
 
-                "家庭资产结构较完整"
+                "投资组合产生正收益"
+
+            );
+
+        }
+
+        // ======================
+
+        // 风险分析
+
+        // ======================
+
+        if(
+
+            health.realEstateRatio > 70
+
+        ){
+
+            result.risks.push(
+
+                "房地产资产占比较高，流动性需要关注"
+
+            );
+
+            result.advice.push(
+
+                "建议逐步增加现金及金融资产比例"
 
             );
 
@@ -110,13 +188,73 @@ const advisor = {
 
         if(
 
-            result.length===0
+            health.liquidityRatio < 10
 
         ){
 
-            result.push(
+            result.risks.push(
 
-                "财富数据正在建立中"
+                "现金储备比例偏低"
+
+            );
+
+            result.advice.push(
+
+                "建议保持6-12个月生活备用资金"
+
+            );
+
+        }
+
+        if(
+
+            health.debtRatio > 50
+
+        ){
+
+            result.risks.push(
+
+                "家庭负债比例较高"
+
+            );
+
+            result.advice.push(
+
+                "建议优化负债结构"
+
+            );
+
+        }
+
+        if(
+
+            health.investmentRatio < 10
+
+        ){
+
+            result.advice.push(
+
+                "建议提高长期投资资产配置"
+
+            );
+
+        }
+
+        // ======================
+
+        // 默认建议
+
+        // ======================
+
+        if(
+
+            result.advice.length===0
+
+        ){
+
+            result.advice.push(
+
+                "当前家庭财富结构运行健康"
 
             );
 
@@ -128,43 +266,33 @@ const advisor = {
 
     // ======================
 
-    // AI建议接口
+    // 简易报告
 
     // ======================
 
-    advice(){
+    report(
 
-        return{
+        assetsAgent,
 
-            title:
+        investmentAgent,
 
-            "AI 财富顾问建议",
+        incomeAgent,
 
-            suggestions:
+        liabilityAgent
 
-            this.diagnose()
+    ){
 
-        };
+        return this.analyze(
 
-    },
+            assetsAgent,
 
-    // ======================
+            investmentAgent,
 
-    // 用户问题接口
+            incomeAgent,
 
-    // ======================
+            liabilityAgent
 
-    ask(question){
-
-        return{
-
-            question,
-
-            answer:
-
-            "AI Advisor V7.0 正在分析家庭财富数据"
-
-        };
+        );
 
     }
 
