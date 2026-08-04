@@ -1,42 +1,24 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
-V6.3.1 Upgrade Build
+V7.0 Final Build
 
 Assets Agent
 
-Asset Classification System
-
-Compatible with V6.2 Data
+家庭资产管理核心模块
 
 */
 
-const STORAGE_KEY = "wealth_assets_v6";
-
-const ASSET_CATEGORIES = [
-
-    "现金",
-
-    "房产",
-
-    "企业资产",
-
-    "保险",
-
-    "贵金属",
-
-    "收藏品",
-
-    "其他"
-
-];
+import familyDatabase from "../database/familyDatabase.js";
 
 const assetsAgent = {
 
     name:
 
-    "Assets Agent V6.3.1 Classification",
+    "Assets Agent V7.0 Final",
 
     // ======================
 
@@ -46,65 +28,9 @@ const assetsAgent = {
 
     init(){
 
-        let data =
+        familyDatabase.init();
 
-        localStorage.getItem(
-
-            STORAGE_KEY
-
-        );
-
-        if(!data){
-
-            localStorage.setItem(
-
-                STORAGE_KEY,
-
-                JSON.stringify([])
-
-            );
-
-        }
-
-        return "Assets V6.3 Ready";
-
-    },
-
-    // ======================
-
-    // 分类列表
-
-    // ======================
-
-    categories(){
-
-        return ASSET_CATEGORIES;
-
-    },
-
-    // ======================
-
-    // 分类检查
-
-    // ======================
-
-    validateCategory(category){
-
-        if(
-
-            ASSET_CATEGORIES.includes(
-
-                category
-
-            )
-
-        ){
-
-            return category;
-
-        }
-
-        return "其他";
+        return "Assets Ready";
 
     },
 
@@ -116,17 +42,9 @@ const assetsAgent = {
 
     getData(){
 
-        let data =
+        return familyDatabase.getModule(
 
-        localStorage.getItem(
-
-            STORAGE_KEY
-
-        );
-
-        return JSON.parse(
-
-            data || "[]"
+            "assets"
 
         );
 
@@ -140,11 +58,11 @@ const assetsAgent = {
 
     save(data){
 
-        localStorage.setItem(
+        return familyDatabase.saveModule(
 
-            STORAGE_KEY,
+            "assets",
 
-            JSON.stringify(data)
+            data
 
         );
 
@@ -156,13 +74,9 @@ const assetsAgent = {
 
     // ======================
 
-    add(asset){
+    add(data){
 
-        let list =
-
-        this.getData();
-
-        let item = {
+        let asset={
 
             id:
 
@@ -170,59 +84,57 @@ const assetsAgent = {
 
             name:
 
-            asset.name || "",
+            data.name || "",
 
             category:
 
-            this.validateCategory(
-
-                asset.category
-
-            ),
+            data.category || "其他",
 
             type:
 
-            asset.type || "",
+            data.type || "",
 
             owner:
 
-            asset.owner || "",
+            data.owner || "",
 
             country:
 
-            asset.country || "",
+            data.country || "",
 
             currency:
 
-            asset.currency || "CNY",
+            data.currency || "CNY",
 
             institution:
 
-            asset.institution || "",
+            data.institution || "",
 
             account:
 
-            asset.account || "",
+            data.account || "",
 
             value:
 
             Number(
 
-                asset.value || 0
+                data.value || 0
 
             ),
 
             note:
 
-            asset.note || ""
+            data.note || ""
 
         };
 
-        list.push(item);
+        return familyDatabase.add(
 
-        this.save(list);
+            "assets",
 
-        return item;
+            asset
+
+        );
 
     },
 
@@ -244,49 +156,23 @@ const assetsAgent = {
 
     // ======================
 
-    edit(id,newData){
+    edit(
 
-        let list =
+        id,
 
-        this.getData();
+        newData
 
-        let index =
+    ){
 
-        list.findIndex(
+        return familyDatabase.update(
 
-            item =>
+            "assets",
 
-            item.id === id
+            id,
+
+            newData
 
         );
-
-        if(index !== -1){
-
-            if(newData.category){
-
-                newData.category =
-
-                this.validateCategory(
-
-                    newData.category
-
-                );
-
-            }
-
-            list[index] = {
-
-                ...list[index],
-
-                ...newData
-
-            };
-
-        }
-
-        this.save(list);
-
-        return list;
 
     },
 
@@ -298,23 +184,13 @@ const assetsAgent = {
 
     delete(id){
 
-        let list =
+        return familyDatabase.remove(
 
-        this.getData();
+            "assets",
 
-        list =
-
-        list.filter(
-
-            item =>
-
-            item.id !== id
+            id
 
         );
-
-        this.save(list);
-
-        return "deleted";
 
     },
 
@@ -330,7 +206,7 @@ const assetsAgent = {
 
         this.getData();
 
-        let totalValue = 0;
+        let totalValue=0;
 
         list.forEach(item=>{
 
@@ -358,37 +234,29 @@ const assetsAgent = {
 
     // ======================
 
-    // 分类配置分析
+    // 分类统计
 
     // ======================
 
-    allocationSummary(){
+    categorySummary(){
 
-        let result = {};
-
-        ASSET_CATEGORIES.forEach(
-
-            category=>{
-
-                result[category]=0;
-
-            }
-
-        );
+        let result={};
 
         this.getData()
 
         .forEach(item=>{
 
-            let key =
+            let category =
 
-            this.validateCategory(
+            item.category || "其他";
 
-                item.category
+            if(!result[category]){
 
-            );
+                result[category]=0;
 
-            result[key] +=
+            }
+
+            result[category]+=
 
             Number(
 
@@ -399,64 +267,6 @@ const assetsAgent = {
         });
 
         return result;
-
-    },
-
-    // ======================
-
-    // 分类比例
-
-    // 给 Wealth Engine 使用
-
-    // ======================
-
-    allocationRatio(){
-
-        let summary =
-
-        this.allocationSummary();
-
-        let total = 0;
-
-        Object.values(summary)
-
-        .forEach(value=>{
-
-            total += value;
-
-        });
-
-        let ratio = {};
-
-        Object.keys(summary)
-
-        .forEach(key=>{
-
-            ratio[key] =
-
-            total === 0 ?
-
-            0 :
-
-            Number(
-
-                (
-
-                summary[key] /
-
-                total *
-
-                100
-
-                )
-
-                .toFixed(2)
-
-            );
-
-        });
-
-        return ratio;
 
     }
 
