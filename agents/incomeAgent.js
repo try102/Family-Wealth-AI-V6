@@ -1,20 +1,24 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
-V6.1 Stable Compatible Build
+V7.0 Final Build
 
 Income Agent
 
-收入管理兼容版
+家庭收入管理核心模块
 
 */
+
+import familyDatabase from "../database/familyDatabase.js";
 
 const incomeAgent = {
 
     name:
 
-    "Income Agent V6.1 Stable",
+    "Income Agent V7.0 Final",
 
     // ======================
 
@@ -24,59 +28,7 @@ const incomeAgent = {
 
     init(){
 
-        let oldData =
-
-        localStorage.getItem(
-
-            "wealth_incomes"
-
-        );
-
-        let newData =
-
-        localStorage.getItem(
-
-            "wealth_income"
-
-        );
-
-        // 优先恢复 V5.4 数据
-
-        if(oldData){
-
-            localStorage.setItem(
-
-                "wealth_income",
-
-                oldData
-
-            );
-
-        }
-
-        else if(newData){
-
-            localStorage.setItem(
-
-                "wealth_incomes",
-
-                newData
-
-            );
-
-        }
-
-        else{
-
-            localStorage.setItem(
-
-                "wealth_incomes",
-
-                JSON.stringify([])
-
-            );
-
-        }
+        familyDatabase.init();
 
         return "Income Ready";
 
@@ -90,29 +42,9 @@ const incomeAgent = {
 
     getData(){
 
-        let data =
+        return familyDatabase.getModule(
 
-        localStorage.getItem(
-
-            "wealth_incomes"
-
-        );
-
-        if(!data){
-
-            data =
-
-            localStorage.getItem(
-
-                "wealth_income"
-
-            );
-
-        }
-
-        return JSON.parse(
-
-            data || "[]"
+            "income"
 
         );
 
@@ -126,21 +58,11 @@ const incomeAgent = {
 
     save(data){
 
-        localStorage.setItem(
+        return familyDatabase.saveModule(
 
-            "wealth_incomes",
+            "income",
 
-            JSON.stringify(data)
-
-        );
-
-        // 兼容 V6.0
-
-        localStorage.setItem(
-
-            "wealth_income",
-
-            JSON.stringify(data)
+            data
 
         );
 
@@ -152,13 +74,9 @@ const incomeAgent = {
 
     // ======================
 
-    add(income){
+    add(data){
 
-        let list =
-
-        this.getData();
-
-        let item={
+        let income={
 
             id:
 
@@ -166,39 +84,45 @@ const incomeAgent = {
 
             name:
 
-            income.name || "",
+            data.name || "",
 
             category:
 
-            income.category || "其他",
+            data.category || "其他",
 
             source:
 
-            income.source || "",
+            data.source || "",
 
             amount:
 
             Number(
 
-                income.amount || 0
+                data.amount || 0
 
             ),
 
             period:
 
-            income.period || "年度",
+            data.period || "年度",
+
+            owner:
+
+            data.owner || "",
 
             note:
 
-            income.note || ""
+            data.note || ""
 
         };
 
-        list.push(item);
+        return familyDatabase.add(
 
-        this.save(list);
+            "income",
 
-        return item;
+            income
+
+        );
 
     },
 
@@ -220,37 +144,23 @@ const incomeAgent = {
 
     // ======================
 
-    edit(id,newData){
+    edit(
 
-        let list =
+        id,
 
-        this.getData();
+        newData
 
-        let index =
+    ){
 
-        list.findIndex(
+        return familyDatabase.update(
 
-            item =>
+            "income",
 
-            item.id === id
+            id,
+
+            newData
 
         );
-
-        if(index !== -1){
-
-            list[index]={
-
-                ...list[index],
-
-                ...newData
-
-            };
-
-        }
-
-        this.save(list);
-
-        return list;
 
     },
 
@@ -262,23 +172,13 @@ const incomeAgent = {
 
     delete(id){
 
-        let list =
+        return familyDatabase.remove(
 
-        this.getData();
+            "income",
 
-        list =
-
-        list.filter(
-
-            item =>
-
-            item.id !== id
+            id
 
         );
-
-        this.save(list);
-
-        return "deleted";
 
     },
 
