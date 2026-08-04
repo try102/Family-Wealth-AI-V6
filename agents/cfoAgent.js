@@ -4,15 +4,11 @@
 
 Family Wealth AI OS
 
-V6.5.1 Upgrade Build
+V7.0 Final Build
 
 AI CFO Agent
 
 家庭财富智能分析中心
-
-Financial Health Integration
-
-Compatible with Wealth Engine V6.5
 
 */
 
@@ -22,7 +18,7 @@ const cfoAgent = {
 
     name:
 
-    "AI CFO Agent V6.5.1 Stable",
+    "AI CFO Agent V7.0 Final",
 
     // ======================
 
@@ -32,13 +28,13 @@ const cfoAgent = {
 
     init(){
 
-        return "AI CFO V6.5 Ready";
+        return "AI CFO Ready";
 
     },
 
     // ======================
 
-    // 财富分析
+    // 分析
 
     // ======================
 
@@ -54,7 +50,7 @@ const cfoAgent = {
 
     ){
 
-        const wealth =
+        let wealth =
 
         wealthEngine.summary(
 
@@ -68,17 +64,7 @@ const cfoAgent = {
 
         );
 
-        const allocation =
-
-        wealthEngine.assetAllocation(
-
-            assetsAgent,
-
-            investmentAgent
-
-        );
-
-        const allocationAnalysis =
+        let allocation =
 
         wealthEngine.allocationAnalysis(
 
@@ -88,7 +74,7 @@ const cfoAgent = {
 
         );
 
-        const financialHealth =
+        let health =
 
         wealthEngine.financialHealth(
 
@@ -102,11 +88,13 @@ const cfoAgent = {
 
         );
 
-        const score =
+        let score =
 
         this.calculateScore(
 
-            wealth
+            wealth,
+
+            health
 
         );
 
@@ -114,55 +102,17 @@ const cfoAgent = {
 
             title:
 
-            "AI CFO 财富分析报告",
+            "AI CFO 家庭财富分析报告",
 
-            totalAssets:
+            ...wealth,
 
-            wealth.totalAssets || 0,
+            allocation,
 
-            totalLiability:
-
-            wealth.totalLiability || 0,
-
-            netWorth:
-
-            wealth.netWorth || 0,
-
-            totalIncome:
-
-            wealth.totalIncome || 0,
-
-            investmentProfit:
-
-            wealth.investmentProfit || 0,
-
-            investmentCount:
-
-            wealth.investmentCount || 0,
-
-            assetCount:
-
-            wealth.assetCount || 0,
+            health,
 
             wealthScore:
 
             score,
-
-            // V6.5 新增
-
-            financialHealth,
-
-            allocation,
-
-            allocationAnalysis,
-
-            scoreAnalysis:
-
-            this.scoreAnalysis(
-
-                wealth
-
-            ),
 
             advice:
 
@@ -170,7 +120,9 @@ const cfoAgent = {
 
                 wealth,
 
-                financialHealth
+                allocation,
+
+                health
 
             )
 
@@ -186,129 +138,13 @@ const cfoAgent = {
 
     calculateScore(
 
-        wealth
+        wealth,
+
+        health
 
     ){
 
-        let score = 0;
-
-        if(
-
-            wealth.totalAssets > 0
-
-        ){
-
-            score +=20;
-
-        }
-
-        if(
-
-            wealth.totalAssets > 100000
-
-        ){
-
-            score +=10;
-
-        }
-
-        if(
-
-            wealth.totalIncome > 0
-
-        ){
-
-            score +=20;
-
-        }
-
-        if(
-
-            wealth.investmentCount > 0
-
-        ){
-
-            score +=15;
-
-        }
-
-        let debtRatio =
-
-        wealth.totalAssets>0
-
-        ?
-
-        (
-
-        wealth.totalLiability
-
-        /
-
-        wealth.totalAssets
-
-        *
-
-        100
-
-        )
-
-        :
-
-        0;
-
-        if(
-
-            debtRatio < 30
-
-        ){
-
-            score +=20;
-
-        }
-
-        else if(
-
-            debtRatio <50
-
-        ){
-
-            score +=10;
-
-        }
-
-        if(
-
-            wealth.assetCount>=3
-
-        ){
-
-            score +=5;
-
-        }
-
-        return Math.min(
-
-            score,
-
-            100
-
-        );
-
-    },
-
-    // ======================
-
-    // 评分解释
-
-    // ======================
-
-    scoreAnalysis(
-
-        wealth
-
-    ){
-
-        let result=[];
+        let score=0;
 
         if(
 
@@ -316,11 +152,7 @@ const cfoAgent = {
 
         ){
 
-            result.push(
-
-            "✓ 家庭资产已建立"
-
-            );
+            score+=20;
 
         }
 
@@ -330,11 +162,7 @@ const cfoAgent = {
 
         ){
 
-            result.push(
-
-            "✓ 存在收入来源"
-
-            );
+            score+=20;
 
         }
 
@@ -344,15 +172,47 @@ const cfoAgent = {
 
         ){
 
-            result.push(
-
-            "✓ 已配置投资资产"
-
-            );
+            score+=15;
 
         }
 
-        return result;
+        if(
+
+            health.debtRatio<30
+
+        ){
+
+            score+=20;
+
+        }
+
+        else if(
+
+            health.debtRatio<50
+
+        ){
+
+            score+=10;
+
+        }
+
+        if(
+
+            health.liquidityRatio>10
+
+        ){
+
+            score+=15;
+
+        }
+
+        if(score>100){
+
+            score=100;
+
+        }
+
+        return score;
 
     },
 
@@ -366,6 +226,8 @@ const cfoAgent = {
 
         wealth,
 
+        allocation,
+
         health
 
     ){
@@ -373,42 +235,6 @@ const cfoAgent = {
         let advice=[];
 
         if(
-
-            wealth.totalAssets===0
-
-        ){
-
-            advice.push(
-
-            "请完善家庭资产信息"
-
-            );
-
-        }
-
-        if(
-
-            health
-
-            &&
-
-            health.debtRatio>50
-
-        ){
-
-            advice.push(
-
-            "家庭负债比例较高，需要关注偿债能力"
-
-            );
-
-        }
-
-        if(
-
-            health
-
-            &&
 
             health.realEstateRatio>70
 
@@ -424,10 +250,6 @@ const cfoAgent = {
 
         if(
 
-            health
-
-            &&
-
             health.liquidityRatio<10
 
         ){
@@ -435,6 +257,20 @@ const cfoAgent = {
             advice.push(
 
             "现金比例偏低，建议保持备用资金"
+
+            );
+
+        }
+
+        if(
+
+            health.debtRatio>50
+
+        ){
+
+            advice.push(
+
+            "负债比例较高，需要关注偿债能力"
 
             );
 
@@ -476,7 +312,7 @@ const cfoAgent = {
 
             advice.push(
 
-            "当前财富结构运行正常"
+            "当前家庭财富结构运行正常"
 
             );
 
@@ -488,7 +324,7 @@ const cfoAgent = {
 
     // ======================
 
-    // 对外接口
+    // 报告接口
 
     // ======================
 
