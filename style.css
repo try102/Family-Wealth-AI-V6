@@ -1,10 +1,12 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
-V6.0 Development Build001
+V7.0 Final Build
 
-Global Style
+Final UI Style
 
 */
 
@@ -16,10 +18,6 @@ Global Style
 
 body{
 
-    margin:0;
-
-    padding:0;
-
     font-family:
 
     -apple-system,
@@ -28,9 +26,13 @@ body{
 
     "Segoe UI",
 
-    "Microsoft YaHei",
+    Arial,
 
     sans-serif;
+
+    margin:0;
+
+    padding:20px;
 
     background:#f5f7fb;
 
@@ -38,41 +40,19 @@ body{
 
 }
 
-header{
-
-    background:#102a43;
-
-    color:white;
-
-    padding:25px;
+h1{
 
     text-align:center;
 
-}
-
-header h1{
-
-    margin:0;
-
-    font-size:28px;
+    font-size:32px;
 
 }
 
-header p{
+h2{
 
-    margin-top:8px;
+    margin-top:20px;
 
-    opacity:0.8;
-
-}
-
-main{
-
-    max-width:1100px;
-
-    margin:auto;
-
-    padding:20px;
+    color:#1f2937;
 
 }
 
@@ -80,49 +60,47 @@ section{
 
     background:white;
 
-    margin-bottom:25px;
+    margin:20px 0;
 
     padding:20px;
 
-    border-radius:15px;
+    border-radius:16px;
 
     box-shadow:
 
-    0 3px 10px
+    0 4px 12px
 
     rgba(0,0,0,0.08);
 
 }
 
-section h2{
-
-    margin-top:0;
-
-    color:#102a43;
-
-}
-
 /* ======================
 
-财富卡片
+财富驾驶舱
 
 ====================== */
 
-.cards{
+.dashboard{
 
     display:grid;
 
     grid-template-columns:
 
-    repeat(auto-fit,minmax(160px,1fr));
+    repeat(
+
+        auto-fit,
+
+        minmax(160px,1fr)
+
+    );
 
     gap:15px;
 
 }
 
-.card{
+.dashboard div{
 
-    background:#eef4ff;
+    background:#f8fafc;
 
     padding:18px;
 
@@ -132,21 +110,11 @@ section h2{
 
 }
 
-.card h3{
+.dashboard h3{
 
-    font-size:16px;
+    font-size:24px;
 
-    margin-bottom:10px;
-
-}
-
-.card p{
-
-    font-size:22px;
-
-    font-weight:bold;
-
-    margin:0;
+    margin-top:10px;
 
 }
 
@@ -156,51 +124,41 @@ section h2{
 
 ====================== */
 
-.form{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:10px;
-
-    margin-bottom:20px;
-
-}
-
 input{
 
-    flex:1;
+    padding:10px;
 
-    min-width:160px;
-
-    padding:12px;
+    margin:5px;
 
     border:
 
-    1px solid #ccc;
+    1px solid #ddd;
 
     border-radius:8px;
 
     font-size:15px;
+
+    max-width:220px;
 
 }
 
 button{
 
-    padding:12px 20px;
+    padding:10px 18px;
+
+    margin:5px;
 
     border:none;
 
     border-radius:8px;
 
-    background:#1976d2;
+    background:#2563eb;
 
     color:white;
 
-    cursor:pointer;
-
     font-size:15px;
+
+    cursor:pointer;
 
 }
 
@@ -212,87 +170,121 @@ button:hover{
 
 /* ======================
 
-列表
+数据卡片
 
 ====================== */
 
-#assetList,
+.item{
 
-#liabilityList,
-
-#incomeList,
-
-#investmentList,
-
-#cfoReport,
-
-#investmentDashboard{
+    background:#f8fafc;
 
     margin-top:15px;
 
-}
+    padding:15px;
 
-.item{
+    border-radius:12px;
 
-    border-top:
+    border-left:
 
-    1px solid #ddd;
-
-    padding:15px 0;
+    4px solid #2563eb;
 
 }
 
 .item h3{
 
-    margin:0 0 10px;
+    margin-top:0;
 
 }
 
 /* ======================
 
-AI报告
+AI报告区域
 
 ====================== */
 
-#cfoReport{
+#cfoReport,
+
+#advisorReport,
+
+#taxCenter,
+
+#retirementCenter,
+
+#financialHealth,
+
+#allocationAnalysis{
 
     line-height:1.8;
 
+    padding:10px;
+
+}
+
+#advisorReport{
+
+    background:#eff6ff;
+
+    border-radius:12px;
+
+}
+
+#taxCenter{
+
+    background:#fefce8;
+
+    border-radius:12px;
+
+}
+
+#retirementCenter{
+
+    background:#ecfdf5;
+
+    border-radius:12px;
+
 }
 
 /* ======================
 
-移动设备
+列表按钮
 
 ====================== */
 
-@media(max-width:600px){
+.item button{
 
-    header h1{
+    font-size:14px;
 
-        font-size:22px;
+    padding:8px 14px;
 
-    }
+}
 
-    main{
+/* ======================
+
+移动端适配
+
+====================== */
+
+@media(max-width:700px){
+
+    body{
 
         padding:10px;
 
     }
 
-    section{
+    h1{
 
-        padding:15px;
-
-    }
-
-    .form{
-
-        flex-direction:column;
+        font-size:25px;
 
     }
 
-    input,
+    input{
+
+        width:100%;
+
+        max-width:none;
+
+    }
 
     button{
 
