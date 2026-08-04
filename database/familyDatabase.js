@@ -1,26 +1,24 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
 V7.0 Final Build
 
 Family Database
 
-家庭财富统一数据库核心
-
-Compatible with V6.5
+家庭财富统一数据库
 
 */
 
-const STORAGE_KEY =
-
-"family_wealth_database";
+const DATABASE_KEY = "family_wealth_database_v7";
 
 const familyDatabase = {
 
     name:
 
-    "Family Database V7.0 Final",
+    "Family Wealth Database V7.0 Final",
 
     // ======================
 
@@ -34,7 +32,7 @@ const familyDatabase = {
 
         localStorage.getItem(
 
-            STORAGE_KEY
+            DATABASE_KEY
 
         );
 
@@ -42,89 +40,59 @@ const familyDatabase = {
 
             let database = {
 
-                familyProfile:{},
+                family:{
 
-                assets:
+                    members:[]
 
-                this.loadOldData(
+                },
 
-                    "wealth_assets"
+                assets:[],
 
-                ),
+                liabilities:[],
 
-                liabilities:
+                income:[],
 
-                this.loadOldData(
+                investments:[],
 
-                    "wealth_liabilities"
+                goals:[],
 
-                ),
+                retirement:{
 
-                income:
+                    enabled:false
 
-                this.loadOldData(
+                },
 
-                    "wealth_incomes"
+                tax:{
 
-                ),
+                    records:[]
 
-                investments:
+                },
 
-                this.loadOldData(
+                created:
 
-                    "wealth_investments"
+                new Date()
 
-                ),
-
-                expenses:[],
-
-                taxes:[],
-
-                retirement:{}
+                .toISOString()
 
             };
 
-            this.save(database);
+            localStorage.setItem(
 
-        }
+                DATABASE_KEY,
 
-        return "Family Database Ready";
-
-    },
-
-    // ======================
-
-    // 读取旧版本数据
-
-    // ======================
-
-    loadOldData(key){
-
-        let data =
-
-        localStorage.getItem(
-
-            key
-
-        );
-
-        if(data){
-
-            return JSON.parse(
-
-                data
+                JSON.stringify(database)
 
             );
 
         }
 
-        return [];
+        return "Database Ready";
 
     },
 
     // ======================
 
-    // 获取全部数据库
+    // 获取全部数据
 
     // ======================
 
@@ -134,7 +102,7 @@ const familyDatabase = {
 
             localStorage.getItem(
 
-                STORAGE_KEY
+                DATABASE_KEY
 
             )
 
@@ -148,7 +116,7 @@ const familyDatabase = {
 
     // ======================
 
-    // 保存数据库
+    // 保存全部数据
 
     // ======================
 
@@ -156,17 +124,109 @@ const familyDatabase = {
 
         localStorage.setItem(
 
-            STORAGE_KEY,
+            DATABASE_KEY,
 
             JSON.stringify(data)
 
         );
 
+        return true;
+
     },
 
     // ======================
 
-    // 更新模块数据
+    // 获取模块数据
+
+    // ======================
+
+    getModule(module){
+
+        let data =
+
+        this.get();
+
+        return data[module]
+
+        ||
+
+        [];
+
+    },
+
+    // ======================
+
+    // 保存模块数据
+
+    // ======================
+
+    saveModule(
+
+        module,
+
+        value
+
+    ){
+
+        let data =
+
+        this.get();
+
+        data[module]=value;
+
+        this.save(data);
+
+        return true;
+
+    },
+
+    // ======================
+
+    // 添加记录
+
+    // ======================
+
+    add(
+
+        module,
+
+        item
+
+    ){
+
+        let list =
+
+        this.getModule(
+
+            module
+
+        );
+
+        item.id =
+
+        item.id
+
+        ||
+
+        Date.now();
+
+        list.push(item);
+
+        this.saveModule(
+
+            module,
+
+            list
+
+        );
+
+        return item;
+
+    },
+
+    // ======================
+
+    // 编辑记录
 
     // ======================
 
@@ -174,123 +234,120 @@ const familyDatabase = {
 
         module,
 
-        data
+        id,
+
+        newData
 
     ){
 
-        let db =
+        let list =
 
-        this.get();
+        this.getModule(
 
-        db[module]=data;
-
-        this.save(db);
-
-        return db;
-
-    },
-
-    // ======================
-
-    // 获取模块
-
-    // ======================
-
-    getModule(module){
-
-        let db =
-
-        this.get();
-
-        return (
-
-            db[module]
-
-            ||
-
-            []
+            module
 
         );
 
-    },
+        let index =
 
-    // ======================
+        list.findIndex(
 
-    // 家庭资料
+            item=>
 
-    // ======================
-
-    setProfile(profile){
-
-        let db=
-
-        this.get();
-
-        db.familyProfile=
-
-        profile;
-
-        this.save(db);
-
-    },
-
-    getProfile(){
-
-        let db=
-
-        this.get();
-
-        return (
-
-            db.familyProfile
-
-            ||
-
-            {}
+            item.id===id
 
         );
 
+        if(index!==-1){
+
+            list[index]={
+
+                ...
+
+                list[index],
+
+                ...
+
+                newData
+
+            };
+
+        }
+
+        this.saveModule(
+
+            module,
+
+            list
+
+        );
+
+        return list;
+
     },
 
     // ======================
 
-    // 数据统计
+    // 删除记录
 
     // ======================
 
-    summary(){
+    remove(
 
-        let db=
+        module,
 
-        this.get();
+        id
 
-        return{
+    ){
 
-            assetCount:
+        let list =
 
-            db.assets.length || 0,
+        this.getModule(
 
-            investmentCount:
+            module
 
-            db.investments.length || 0,
+        );
 
-            liabilityCount:
+        list =
 
-            db.liabilities.length || 0,
+        list.filter(
 
-            incomeCount:
+            item=>
 
-            db.income.length || 0,
+            item.id!==id
 
-            expenseCount:
+        );
 
-            db.expenses.length || 0
+        this.saveModule(
 
-        };
+            module,
+
+            list
+
+        );
+
+        return true;
+
+    },
+
+    // ======================
+
+    // 清空数据库
+
+    // ======================
+
+    reset(){
+
+        localStorage.removeItem(
+
+            DATABASE_KEY
+
+        );
+
+        return "Database Reset";
 
     }
 
 };
 
 export default familyDatabase;
-
