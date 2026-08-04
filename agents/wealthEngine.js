@@ -1,14 +1,16 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
-V6.3.5 Upgrade
+V6.5.0 Upgrade Build
 
 Wealth Engine
 
 家庭财富统一总账引擎
 
-兼容 V6.2 Data
+Compatible with V6.4.2
 
 */
 
@@ -16,7 +18,7 @@ const wealthEngine={
 
     name:
 
-    "Wealth Engine V6.3.5 Stable",
+    "Wealth Engine V6.5.0 Stable",
 
     // ======================
 
@@ -166,10 +168,6 @@ const wealthEngine={
 
                 ||
 
-                income.total
-
-                ||
-
                 0
 
             ),
@@ -188,27 +186,15 @@ const wealthEngine={
 
             assetCount:
 
-            assets.count
-
-            ||
-
-            0,
+            assets.count || 0,
 
             investmentCount:
 
-            investment.count
-
-            ||
-
-            0,
+            investment.count || 0,
 
             incomeCount:
 
-            income.count
-
-            ||
-
-            0
+            income.count || 0
 
         };
 
@@ -262,11 +248,7 @@ const wealthEngine={
 
                 Number(
 
-                    item.value
-
-                    ||
-
-                    0
+                    item.value || 0
 
                 );
 
@@ -306,11 +288,7 @@ const wealthEngine={
 
                 Number(
 
-                    item.marketValue
-
-                    ||
-
-                    0
+                    item.marketValue || 0
 
                 );
 
@@ -325,8 +303,6 @@ const wealthEngine={
     // ======================
 
     // 财富结构分析
-
-    // V6.3.5
 
     // ======================
 
@@ -348,7 +324,7 @@ const wealthEngine={
 
         );
 
-        let total = 0;
+        let total=0;
 
         Object.values(allocation)
 
@@ -464,125 +440,209 @@ const wealthEngine={
 
     // ======================
 
-    // 所有人配置
+    // V6.5 新增
+
+    // 财务健康分析
 
     // ======================
 
-    ownerAllocation(
+    financialHealth(
 
-        assetsAgent
+        assetsAgent,
+
+        investmentAgent,
+
+        incomeAgent,
+
+        liabilityAgent
 
     ){
 
-        let result={};
+        let wealth =
 
-        if(
+        this.summary(
 
-            assetsAgent
+            assetsAgent,
 
-            &&
+            investmentAgent,
 
-            assetsAgent.view
+            incomeAgent,
 
-        ){
+            liabilityAgent
 
-            assetsAgent.view()
+        );
 
-            .forEach(item=>{
+        let allocation =
 
-                let owner =
+        this.assetAllocation(
 
-                item.owner
+            assetsAgent,
 
-                ||
+            investmentAgent
 
-                "未分类";
+        );
 
-                if(!result[owner]){
+        let totalAssets =
 
-                    result[owner]=0;
+        wealth.totalAssets || 0;
 
-                }
+        let debtRatio =
 
-                result[owner]+=
+        totalAssets===0
 
-                Number(
+        ?
 
-                    item.value
+        0
 
-                    ||
+        :
 
-                    0
+        Number(
 
-                );
+            (
 
-            });
+            wealth.totalLiability
 
-        }
+            /
 
-        return result;
+            totalAssets
 
-    },
+            *
 
-    // ======================
+            100
 
-    // 国家配置
+            )
 
-    // ======================
+            .toFixed(2)
 
-    countryAllocation(
+        );
 
-        assetsAgent
+        let realEstate =
 
-    ){
+        allocation["房产"]
 
-        let result={};
+        ||
 
-        if(
+        0;
 
-            assetsAgent
+        let cash =
 
-            &&
+        allocation["现金"]
 
-            assetsAgent.view
+        ||
 
-        ){
+        0;
 
-            assetsAgent.view()
+        let investment =
 
-            .forEach(item=>{
+        allocation["股票"]
 
-                let country =
+        ||
 
-                item.country
+        allocation["投资资产"]
 
-                ||
+        ||
 
-                "其他";
+        0;
 
-                if(!result[country]){
+        return{
 
-                    result[country]=0;
+            debtRatio,
 
-                }
+            liquidityRatio:
 
-                result[country]+=
+            totalAssets===0
 
-                Number(
+            ?
 
-                    item.value
+            0
 
-                    ||
+            :
 
-                    0
+            Number(
 
-                );
+                (
 
-            });
+                cash
 
-        }
+                /
 
-        return result;
+                totalAssets
+
+                *
+
+                100
+
+                )
+
+                .toFixed(2)
+
+            ),
+
+            investmentRatio:
+
+            totalAssets===0
+
+            ?
+
+            0
+
+            :
+
+            Number(
+
+                (
+
+                investment
+
+                /
+
+                totalAssets
+
+                *
+
+                100
+
+                )
+
+                .toFixed(2)
+
+            ),
+
+            realEstateRatio:
+
+            totalAssets===0
+
+            ?
+
+            0
+
+            :
+
+            Number(
+
+                (
+
+                realEstate
+
+                /
+
+                totalAssets
+
+                *
+
+                100
+
+                )
+
+                .toFixed(2)
+
+            ),
+
+            annualCashFlow:
+
+            wealth.totalIncome || 0
+
+        };
 
     },
 
@@ -640,19 +700,17 @@ const wealthEngine={
 
             ),
 
-            ownerAllocation:
+            financialHealth:
 
-            this.ownerAllocation(
+            this.financialHealth(
 
-                assetsAgent
+                assetsAgent,
 
-            ),
+                investmentAgent,
 
-            countryAllocation:
+                incomeAgent,
 
-            this.countryAllocation(
-
-                assetsAgent
+                liabilityAgent
 
             )
 
