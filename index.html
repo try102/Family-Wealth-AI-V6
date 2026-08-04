@@ -10,7 +10,7 @@
 
 <title>
 
-Family Wealth AI OS V6.5
+Family Wealth AI OS V7.0
 
 </title>
 
@@ -28,19 +28,17 @@ Family Wealth AI OS V6.5
 
 <h2>
 
-V6.5 Financial Health Build
+V7.0 Final Wealth Intelligence Build
 
 </h2>
 
-<!-- ====================== -->
+<!-- ======================
 
-<!-- 财富驾驶舱 -->
+财富驾驶舱
 
-<!-- ====================== -->
+====================== -->
 
 <section>
-
-<div class="card">
 
 <h2>
 
@@ -48,103 +46,77 @@ V6.5 Financial Health Build
 
 </h2>
 
-<h3>
+<div class="dashboard">
+
+<div>
 
 净资产
 
-</h3>
-
-<p id="netWorth">
+<h3 id="netWorth">
 
 ¥0
 
-</p>
-
-<h3>
-
-总资产
-
 </h3>
-
-<p id="totalAssets">
-
-¥0
-
-</p>
-
-<h3>
-
-总负债
-
-</h3>
-
-<p id="totalLiability">
-
-¥0
-
-</p>
-
-<h3>
-
-年度收入
-
-</h3>
-
-<p id="totalIncome">
-
-¥0
-
-</p>
-
-<h3>
-
-投资收益
-
-</h3>
-
-<p id="investmentReturn">
-
-¥0
-
-</p>
-
-<h3>
-
-财富评分
-
-</h3>
-
-<p id="wealthScore">
-
-0
-
-</p>
-
-<!-- V6.4 -->
-
-<h3>
-
-📊 资产配置分析
-
-</h3>
-
-<div id="allocationAnalysis">
-
-暂无资产配置数据
 
 </div>
 
-<!-- V6.5新增 -->
+<div>
 
-<h3>
+总资产
 
-❤️ 财务健康分析
+<h3 id="totalAssets">
+
+¥0
 
 </h3>
 
-<div id="financialHealth">
+</div>
 
-暂无数据
+<div>
+
+总负债
+
+<h3 id="totalLiability">
+
+¥0
+
+</h3>
+
+</div>
+
+<div>
+
+年度收入
+
+<h3 id="totalIncome">
+
+¥0
+
+</h3>
+
+</div>
+
+<div>
+
+投资收益
+
+<h3 id="investmentReturn">
+
+¥0
+
+</h3>
+
+</div>
+
+<div>
+
+财富评分
+
+<h3 id="wealthScore">
+
+0
+
+</h3>
 
 </div>
 
@@ -152,11 +124,54 @@ V6.5 Financial Health Build
 
 </section>
 
-<!-- ====================== -->
+<!-- ======================
 
-<!-- 资产中心 -->
+资产配置
 
-<!-- ====================== -->
+====================== -->
+
+<section>
+
+<h2>
+
+📊 资产配置分析
+
+</h2>
+
+<div id="allocationAnalysis">
+
+暂无资产配置数据
+
+</div>
+
+</section>
+
+<!-- ======================
+
+财务健康
+
+====================== -->
+
+<section>
+
+<h2>
+
+❤️ 财务健康分析
+
+</h2>
+
+<div id="financialHealth">
+
+暂无数据
+
+</div>
+
+</section>
+<!-- ======================
+
+资产中心
+
+====================== -->
 
 <section>
 
@@ -166,105 +181,15 @@ V6.5 Financial Health Build
 
 </h2>
 
-<div class="form">
+<div>
 
-<input
+<input id="assetName" placeholder="资产名称">
 
-id="assetName"
+<input id="assetCategory" placeholder="类别">
 
-placeholder="资产名称">
+<input id="assetType" placeholder="类型">
 
-<select id="assetCategory">
-
-<option value="现金">
-
-现金
-
-</option>
-
-<option value="房产">
-
-房产
-
-</option>
-
-<option value="企业资产">
-
-企业资产
-
-</option>
-
-<option value="保险">
-
-保险
-
-</option>
-
-<option value="贵金属">
-
-贵金属
-
-</option>
-
-<option value="收藏品">
-
-收藏品
-
-</option>
-
-<option value="其他">
-
-其他
-
-</option>
-
-</select>
-
-<input
-
-id="assetType"
-
-placeholder="资产类型">
-
-<input
-
-id="assetOwner"
-
-placeholder="所属人">
-
-<input
-
-id="assetCountry"
-
-placeholder="国家">
-
-<input
-
-id="assetCurrency"
-
-placeholder="币种"
-
-value="CNY">
-
-<input
-
-id="assetInstitution"
-
-placeholder="金融机构/机构">
-
-<input
-
-id="assetAccount"
-
-placeholder="账户信息">
-
-<input
-
-id="assetValue"
-
-type="number"
-
-placeholder="资产价值">
+<input id="assetValue" placeholder="价值">
 
 <button onclick="addNewAsset()">
 
@@ -280,11 +205,11 @@ placeholder="资产价值">
 
 </section>
 
-<!-- ====================== -->
+<!-- ======================
 
-<!-- 负债中心 -->
+负债中心
 
-<!-- ====================== -->
+====================== -->
 
 <section>
 
@@ -294,41 +219,17 @@ placeholder="资产价值">
 
 </h2>
 
-<div class="form">
+<div>
 
-<input
+<input id="liabilityName" placeholder="负债名称">
 
-id="liabilityName"
+<input id="liabilityCategory" placeholder="类别">
 
-placeholder="负债名称">
+<input id="liabilityPrincipal" placeholder="本金">
 
-<input
+<input id="liabilityInterest" placeholder="利率">
 
-id="liabilityCategory"
-
-placeholder="负债类别">
-
-<input
-
-id="liabilityPrincipal"
-
-type="number"
-
-placeholder="负债本金">
-
-<input
-
-id="liabilityInterest"
-
-type="number"
-
-placeholder="利率 %">
-
-<input
-
-id="liabilityPeriod"
-
-placeholder="周期">
+<input id="liabilityPeriod" placeholder="周期">
 
 <button onclick="addNewLiability()">
 
@@ -343,11 +244,12 @@ placeholder="周期">
 </div>
 
 </section>
-<!-- ====================== -->
 
-<!-- 收入中心 -->
+<!-- ======================
 
-<!-- ====================== -->
+收入中心
+
+====================== -->
 
 <section>
 
@@ -357,33 +259,15 @@ placeholder="周期">
 
 </h2>
 
-<div class="form">
+<div>
 
-<input
+<input id="incomeName" placeholder="收入名称">
 
-id="incomeName"
+<input id="incomeCategory" placeholder="类别">
 
-placeholder="收入名称">
+<input id="incomeAmount" placeholder="金额">
 
-<input
-
-id="incomeCategory"
-
-placeholder="收入类别">
-
-<input
-
-id="incomeSource"
-
-placeholder="收入来源">
-
-<input
-
-id="incomeAmount"
-
-type="number"
-
-placeholder="收入金额">
+<input id="incomeSource" placeholder="来源">
 
 <button onclick="addIncome()">
 
@@ -399,11 +283,11 @@ placeholder="收入金额">
 
 </section>
 
-<!-- ====================== -->
+<!-- ======================
 
-<!-- 投资中心 -->
+投资中心
 
-<!-- ====================== -->
+====================== -->
 
 <section>
 
@@ -413,25 +297,15 @@ placeholder="收入金额">
 
 </h2>
 
-<div class="form">
+<div>
 
-<input
+<input id="investmentName" placeholder="投资名称">
 
-id="investmentName"
+<input id="investmentTicker" placeholder="代码">
 
-placeholder="投资名称">
+<input id="investmentType" placeholder="类型">
 
-<input
-
-id="investmentTicker"
-
-placeholder="代码">
-
-<input
-
-id="investmentType"
-
-placeholder="投资类型">
+<br>
 
 <label>
 
@@ -439,27 +313,13 @@ placeholder="投资类型">
 
 </label>
 
-<input
+<input 
+
+type="date"
 
 id="investmentBuyDate"
 
-type="date">
-
-<input
-
-id="investmentBuyPrice"
-
-type="number"
-
-placeholder="买入价格">
-
-<input
-
-id="investmentBuyQuantity"
-
-type="number"
-
-placeholder="买入数量">
+>
 
 <label>
 
@@ -467,35 +327,41 @@ placeholder="买入数量">
 
 </label>
 
-<input
+<input 
+
+type="date"
 
 id="investmentSellDate"
 
-type="date">
+>
 
-<input
+<br>
 
-id="investmentSellPrice"
+<input 
 
-type="number"
+id="investmentBuyPrice"
 
-placeholder="卖出价格">
+placeholder="买入价格"
 
-<input
+>
 
-id="investmentSellQuantity"
+<input 
 
-type="number"
+id="investmentBuyQuantity"
 
-placeholder="卖出数量">
+placeholder="数量"
 
-<input
+>
+
+<input 
 
 id="investmentCurrentPrice"
 
-type="number"
+placeholder="当前价格"
 
-placeholder="当前价格">
+>
+
+<br>
 
 <button onclick="addInvestment()">
 
@@ -511,11 +377,11 @@ placeholder="当前价格">
 
 </section>
 
-<!-- ====================== -->
+<!-- ======================
 
-<!-- AI CFO -->
+AI CFO
 
-<!-- ====================== -->
+====================== -->
 
 <section>
 
@@ -533,17 +399,40 @@ placeholder="当前价格">
 
 <div id="cfoReport">
 
-AI CFO 财富分析报告
+</div>
+
+</section>
+<!-- ======================
+
+AI Advisor
+
+====================== -->
+
+<section>
+
+<h2>
+
+🤖 AI 财富顾问
+
+</h2>
+
+<button onclick="generateAdvisorReport()">
+
+生成财富顾问报告
+
+</button>
+
+<div id="advisorReport">
 
 </div>
 
 </section>
 
-<!-- ====================== -->
+<!-- ======================
 
-<!-- 税务中心 -->
+税务中心
 
-<!-- ====================== -->
+====================== -->
 
 <section>
 
@@ -561,23 +450,23 @@ AI CFO 财富分析报告
 
 <div id="taxCenter">
 
-等待接入
+等待生成
 
 </div>
 
 </section>
 
-<!-- ====================== -->
+<!-- ======================
 
-<!-- 退休中心 -->
+退休中心
 
-<!-- ====================== -->
+====================== -->
 
 <section>
 
 <h2>
 
-🏖 退休中心
+🏖 退休规划中心
 
 </h2>
 
@@ -589,17 +478,39 @@ AI CFO 财富分析报告
 
 <div id="retirementCenter">
 
-等待接入
+等待生成
 
 </div>
 
 </section>
 
-<!-- ====================== -->
+<!-- ======================
 
-<!-- 系统入口 -->
+系统说明
 
-<!-- ====================== -->
+====================== -->
+
+<section>
+
+<h2>
+
+Family Wealth AI OS V7.0
+
+</h2>
+
+<p>
+
+家庭财富智能操作系统
+
+</p>
+
+<p>
+
+Assets + Investment + CFO + Advisor + Tax + Retirement
+
+</p>
+
+</section>
 
 <script type="module" src="app.js"></script>
 
