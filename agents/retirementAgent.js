@@ -1,110 +1,250 @@
 /*
 
+ 
+
 Family Wealth AI OS
 
-V6.0 Development Build001
+V7.0 Final Build
 
 Retirement Agent
 
-家庭退休规划模块
+家庭退休规划智能中心
 
 */
 
-const retirementAgent={
+import wealthEngine from "./wealthEngine.js";
+
+const retirementAgent = {
 
     name:
 
-    "Retirement Agent V6.0",
-
-    // ======================
-
-    // 初始化
-
-    // ======================
+    "Retirement Agent V7.0 Final",
 
     init(){
 
-        return "Retirement Ready";
+        return "Retirement Agent Ready";
 
     },
 
     // ======================
 
-    // 基础退休分析
+    // 退休分析
 
     // ======================
 
-    analyze(data={}){
+    analyze(
+
+        assetsAgent,
+
+        investmentAgent,
+
+        incomeAgent,
+
+        liabilityAgent,
+
+        settings={}
+
+    ){
+
+        let wealth =
+
+        wealthEngine.summary(
+
+            assetsAgent,
+
+            investmentAgent,
+
+            incomeAgent,
+
+            liabilityAgent
+
+        );
+
+        let age =
+
+        Number(
+
+            settings.currentAge || 58
+
+        );
+
+        let retireAge =
+
+        Number(
+
+            settings.retireAge || 65
+
+        );
+
+        let years =
+
+        Math.max(
+
+            retireAge-age,
+
+            0
+
+        );
+
+        let annualIncome =
+
+        wealth.totalIncome || 0;
 
         let currentAssets =
 
-        Number(
+        wealth.totalAssets || 0;
 
-            data.currentAssets || 0
-
-        );
-
-        let annualExpense =
+        let growthRate =
 
         Number(
 
-            data.annualExpense || 0
-
-        );
-
-        let targetAssets =
-
-        annualExpense * 25;
-
-        let progress =
-
-        targetAssets > 0
-
-        ?
-
-        (
-
-            currentAssets
-
-            /
-
-            targetAssets
-
-            *
-
-            100
+            settings.returnRate || 5
 
         )
 
-        :
+        /100;
 
-        0;
+        let futureAssets =
 
-        return {
+        currentAssets
+
+        *
+
+        Math.pow(
+
+            1+growthRate,
+
+            years
+
+        );
+
+        return{
+
+            currentAge:age,
+
+            retirementAge:retireAge,
+
+            yearsToRetirement:years,
 
             currentAssets,
 
-            annualExpense,
+            projectedAssets:
 
-            targetAssets,
+            Math.round(
 
-            progress:
-
-            Number(
-
-                progress.toFixed(2)
+                futureAssets
 
             ),
 
-            advice:[
+            annualIncome,
 
-                "退休模块基础版本已连接",
+            status:
 
-                "后续可加入退休现金流预测"
+            this.evaluate(
 
-            ]
+                futureAssets,
+
+                settings
+
+            ),
+
+            advice:
+
+            this.advice(
+
+                wealth
+
+            )
 
         };
+
+    },
+
+    // ======================
+
+    // 状态判断
+
+    // ======================
+
+    evaluate(
+
+        assets,
+
+        settings
+
+    ){
+
+        let target =
+
+        Number(
+
+            settings.target || 3000000
+
+        );
+
+        if(
+
+            assets>=target
+
+        ){
+
+            return "退休资金目标基本达成";
+
+        }
+
+        return "退休资金仍需要继续积累";
+
+    },
+
+    // ======================
+
+    // 建议
+
+    // ======================
+
+    advice(
+
+        wealth
+
+    ){
+
+        let result=[];
+
+        if(
+
+            wealth.totalIncome>0
+
+        ){
+
+            result.push(
+
+            "保持稳定收入，提高长期投资比例"
+
+            );
+
+        }
+
+        if(
+
+            wealth.totalAssets>0
+
+        ){
+
+            result.push(
+
+            "持续管理家庭资产配置"
+
+            );
+
+        }
+
+        result.push(
+
+        "定期重新评估退休目标"
+
+        );
+
+        return result;
 
     },
 
@@ -114,11 +254,31 @@ const retirementAgent={
 
     // ======================
 
-    report(data={}){
+    report(
+
+        assetsAgent,
+
+        investmentAgent,
+
+        incomeAgent,
+
+        liabilityAgent,
+
+        settings={}
+
+    ){
 
         return this.analyze(
 
-            data
+            assetsAgent,
+
+            investmentAgent,
+
+            incomeAgent,
+
+            liabilityAgent,
+
+            settings
 
         );
 
