@@ -1,1 +1,296 @@
+/*
+
+Family Wealth AI OS
+
+V7.0 Final Build
+
+Family Database
+
+家庭财富统一数据库核心
+
+Compatible with V6.5
+
+*/
+
+const STORAGE_KEY =
+
+"family_wealth_database";
+
+const familyDatabase = {
+
+    name:
+
+    "Family Database V7.0 Final",
+
+    // ======================
+
+    // 初始化数据库
+
+    // ======================
+
+    init(){
+
+        let data =
+
+        localStorage.getItem(
+
+            STORAGE_KEY
+
+        );
+
+        if(!data){
+
+            let database = {
+
+                familyProfile:{},
+
+                assets:
+
+                this.loadOldData(
+
+                    "wealth_assets"
+
+                ),
+
+                liabilities:
+
+                this.loadOldData(
+
+                    "wealth_liabilities"
+
+                ),
+
+                income:
+
+                this.loadOldData(
+
+                    "wealth_incomes"
+
+                ),
+
+                investments:
+
+                this.loadOldData(
+
+                    "wealth_investments"
+
+                ),
+
+                expenses:[],
+
+                taxes:[],
+
+                retirement:{}
+
+            };
+
+            this.save(database);
+
+        }
+
+        return "Family Database Ready";
+
+    },
+
+    // ======================
+
+    // 读取旧版本数据
+
+    // ======================
+
+    loadOldData(key){
+
+        let data =
+
+        localStorage.getItem(
+
+            key
+
+        );
+
+        if(data){
+
+            return JSON.parse(
+
+                data
+
+            );
+
+        }
+
+        return [];
+
+    },
+
+    // ======================
+
+    // 获取全部数据库
+
+    // ======================
+
+    get(){
+
+        return JSON.parse(
+
+            localStorage.getItem(
+
+                STORAGE_KEY
+
+            )
+
+            ||
+
+            "{}"
+
+        );
+
+    },
+
+    // ======================
+
+    // 保存数据库
+
+    // ======================
+
+    save(data){
+
+        localStorage.setItem(
+
+            STORAGE_KEY,
+
+            JSON.stringify(data)
+
+        );
+
+    },
+
+    // ======================
+
+    // 更新模块数据
+
+    // ======================
+
+    update(
+
+        module,
+
+        data
+
+    ){
+
+        let db =
+
+        this.get();
+
+        db[module]=data;
+
+        this.save(db);
+
+        return db;
+
+    },
+
+    // ======================
+
+    // 获取模块
+
+    // ======================
+
+    getModule(module){
+
+        let db =
+
+        this.get();
+
+        return (
+
+            db[module]
+
+            ||
+
+            []
+
+        );
+
+    },
+
+    // ======================
+
+    // 家庭资料
+
+    // ======================
+
+    setProfile(profile){
+
+        let db=
+
+        this.get();
+
+        db.familyProfile=
+
+        profile;
+
+        this.save(db);
+
+    },
+
+    getProfile(){
+
+        let db=
+
+        this.get();
+
+        return (
+
+            db.familyProfile
+
+            ||
+
+            {}
+
+        );
+
+    },
+
+    // ======================
+
+    // 数据统计
+
+    // ======================
+
+    summary(){
+
+        let db=
+
+        this.get();
+
+        return{
+
+            assetCount:
+
+            db.assets.length || 0,
+
+            investmentCount:
+
+            db.investments.length || 0,
+
+            liabilityCount:
+
+            db.liabilities.length || 0,
+
+            incomeCount:
+
+            db.income.length || 0,
+
+            expenseCount:
+
+            db.expenses.length || 0
+
+        };
+
+    }
+
+};
+
+export default familyDatabase;
 
